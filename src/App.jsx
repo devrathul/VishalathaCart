@@ -1,12 +1,15 @@
 import Header from './components/common/Header'
 import Footer from './components/common/Footer'
+import CategoryCard from './components/category/CategoryCard'
 
 function App() {
   return (
     <>
       <Header />
-      <h1>Vishalatha Cart</h1>
-      <Footer/>
+      <div className='max-w-310 mx-auto px-4'>
+        <CategoryCard />
+      </div>
+      <Footer />
     </>
   )
 }
