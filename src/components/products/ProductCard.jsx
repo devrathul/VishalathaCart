@@ -4,8 +4,7 @@ import iphoneImg from '../../assets/images/iphone.png'
 const ProductCard = () => {
     return (
         <>
-            <h2 className='font-bold mt-8 mb-4 text-lg'>Shop By Product</h2>
-            <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-10 mx-auto my-10'>
+            <div className='grid min-[450px]:grid-cols-1 min-[680px]:grid-cols-2 min-[1000px]:grid-cols-3 min-[1300px]:grid-cols-4 min-[1500px]:grid-cols-5  gap-10 mx-auto my-10'>
                 <div className="w-full rounded-2xl border border-blue-100 bg-white p-3 shadow-sm">
                     <div className="relative flex h-62.5 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-b from-white to-slate-50">
                         <span className="absolute left-2 top-2 z-10 rounded-full bg-gradient-to-r from-red-500 to-pink-500 px-4 py-1.5 text-sm font-bold text-white">

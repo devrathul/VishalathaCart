@@ -3,7 +3,6 @@ import electronicImg from '../../assets/images/electronic.png'
 const CategoryCard = () => {
     return (
         <>
-        <h2 className='font-bold mt-8 mb-4 text-lg'>Shop By Category</h2>
         <div className='grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] mb-8 gap-10'>
             <div className="card p-4 rounded-2xl shadow-2xl">
                 <img src={electronicImg} alt="category" title="category" />

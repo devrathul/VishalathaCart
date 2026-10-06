@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router'
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import { FaCartShopping, FaRegCircleUser } from "react-icons/fa6";
-import logo  from '/images/logo.png'
-
+import logo from '/images/logo.png'
 
 const Header = () => {
     // State to manage the navbar's visibility
@@ -16,13 +16,13 @@ const Header = () => {
 
     return (
         <div className='bg-white border-b-gray-300 shadow'>
-            <div className='max-w-[1240px] mx-auto py-5'>
+            <div className='max-w-[1650px] mx-auto py-5'>
                 <div className='flex justify-between items-center px-5 gap-5'>
                     <div className='lg:w-1/5 flex-none'>
                         <img src={logo} title="Vishalatha Cart | Shopping Assistant" alt="Vishalatha Cart | Shopping Assistant" />
                     </div>
                     <div className='lg:w-3/5 shrink items-center text-center hidden md:block'>
-                        <div className='flex border border-gray-400 outline-gray-400 rounded-full px-3 py-1 max-w-100 mx-auto'>
+                        <div className='flex border border-gray-400 outline-gray-400 rounded-full px-3 py-1 max-w-150 mx-auto'>
                             <input type="search" className='w-full outline-0' placeholder='Search for products, brands and more...' />
                             <AiOutlineSearch size={25} />
                         </div>
@@ -42,16 +42,16 @@ const Header = () => {
                     {/* Desktop Navigation */}
                     <ul className='hidden md:flex gap-5 text-[#031d44]'>
                         <li className='px-4 py-2 cursor-pointer duration-300 hover:text-[#0162fc]'>
-                            Home
+                            <Link to="/"> Home </Link>
                         </li>
                         <li className='px-4 py-2 cursor-pointer duration-300 hover:text-[#0162fc]'>
-                            Shop
+                            <Link to="/products"> Shop </Link>
                         </li>
                         <li className='px-4 py-2 cursor-pointer duration-300 hover:text-[#0162fc]'>
-                            Deal
+                            <Link to="/deals"> Deal </Link>
                         </li>
                         <li className='px-4 py-2 cursor-pointer duration-300 hover:text-[#0162fc]'>
-                            About
+                            <Link to="/about"> About </Link>
                         </li>
                     </ul>
 
