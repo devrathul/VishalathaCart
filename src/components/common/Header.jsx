@@ -48,10 +48,10 @@ const Header = () => {
                             <Link to="/products"> Shop </Link>
                         </li>
                         <li className='px-4 py-2 cursor-pointer duration-300 hover:text-[#0162fc]'>
-                            <Link to="/deals"> Deal </Link>
+                            <Link to="/about"> About </Link>
                         </li>
                         <li className='px-4 py-2 cursor-pointer duration-300 hover:text-[#0162fc]'>
-                            <Link to="/about"> About </Link>
+                            <Link to="/contact"> Contact Us </Link>
                         </li>
                     </ul>
 
@@ -64,22 +64,22 @@ const Header = () => {
                         }
                     >
                         <li className='p-4 border-b-gray-400 duration-300  hover:text-[#0162fc] cursor-pointer'>
-                            Home
+                            <Link to="/"> Home </Link>
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
-                            Shop
+                            <Link to="/products"> Shop </Link>
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
-                            Deal
+                            <Link to="/about"> About </Link>
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
-                            About
+                            <Link to="/contact"> Contact Us </Link>
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
-                            <div className=' flex gap-4'><FaRegCircleUser size={25} /><span>Login</span></div>
+                            <Link className='flex gap-4' to="/login"><FaRegCircleUser size={25} /><span>Login</span></Link>
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
-                            <div className=' flex gap-4'><FaCartShopping size={25} /><span>Cart</span></div>
+                            <Link className=' flex gap-4' to="/cart"><FaCartShopping size={25} /><span>Cart</span></Link>
                         </li>
                     </ul>
                 </div>

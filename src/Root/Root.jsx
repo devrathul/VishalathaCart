@@ -6,9 +6,9 @@ export default function Root() {
     return (
         <>
             <Header />
-            <div className='max-w-[1650px] mx-auto px-8'>
+            <main className='max-w-[1650px] mx-auto px-8'>
                 <Outlet />
-            </div>
+            </main>
             <Footer />
         </>
     );

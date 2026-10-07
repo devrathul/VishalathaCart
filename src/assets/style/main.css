@@ -1,8 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
 * {
   font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
 }
+
 body {
   margin: 0;
+}
+
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+input[type="range"] {
+  accent-color: #087ff5;
 }
