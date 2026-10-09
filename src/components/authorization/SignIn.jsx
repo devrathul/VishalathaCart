@@ -16,11 +16,12 @@ const SignIn = () => {
     const isLoggedIn = Cookies.get('loginProfile') ? true : false
 
     const onIsUsers = () => {
-        if (mobileOrEmail !== null) {
-            const user = userList.some(user => user.email === mobileOrEmail || user.phone === mobileOrEmail)
+        const user = userList.some(user => user.email === mobileOrEmail || user.phone === mobileOrEmail)
+        if (mobileOrEmail !== null && mobileOrEmail !== '' && user) {
             setIsUsers(user)
         } else {
-            setIsUsers(false)
+            setIsUsers(user)
+            navigate('/signup')
         }
     }
 
@@ -54,8 +55,6 @@ const SignIn = () => {
         }
     }
 
-
-
     return (
         <>
             {isLoggedIn && <Navigate to="/" />}
@@ -64,7 +63,7 @@ const SignIn = () => {
                 <div className="min-h-screen bg-[#eef8ff] flex items-center justify-center p-4">
                     <div className="w-full max-w-[940px] min-h-[620px] bg-white rounded-xl overflow-hidden shadow-login border border-[#dceeff] flex">
                         <div className="relative hidden md:flex md:w-[43%] bg-gradient-to-b from-[#f0f9ff] to-[#e8f6ff] px-10 py-8 flex-col">
-                            <div className="flex items-center gap-2">                                
+                            <div className="flex items-center gap-2">
                                 <div className="leading-[0.9]">
                                     <div className="text-[#075bd6] font-extrabold text-[16px]">
                                         Vishalatha
