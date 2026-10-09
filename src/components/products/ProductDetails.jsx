@@ -80,7 +80,7 @@ const ProductDetailsContent = ({ product, products }) => {
                         ))}
                     </div>
 
-                    <div className="relative flex min-h-[340px] items-center justify-center overflow-hidden rounded-xl border border-blue-100 bg-[#f2faff] sm:min-h-[480px]">
+                    <div className="relative flex min-h-85 items-center justify-center overflow-hidden rounded-xl border border-blue-100 bg-[#f2faff] sm:min-h-120">
                         <span className="absolute left-0 top-0 rounded-br-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white">
                             {product.discount}% OFF
                         </span>
@@ -95,7 +95,7 @@ const ProductDetailsContent = ({ product, products }) => {
                         </button>
                         <img
                             alt={product.name}
-                            className="h-[min(400px,70vw)] w-[78%] max-w-[450px] object-contain mix-blend-multiply"
+                            className="h-[min(400px,70vw)] w-[78%] max-w-112.5 object-contain mix-blend-multiply"
                             src={imageUrl}
                         />
                     </div>

@@ -10,6 +10,8 @@ import ProductDetails from './components/products/ProductDetails'
 import About from './components/common/About'
 import ContactUs from './components/common/ContactUs'
 import PageNotFound from './components/common/PageNotFound'
+import SignIn from './components/authorization/SignIn'
+import SignUp from './components/authorization/SignUp'
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,8 @@ const router = createBrowserRouter([
       { path: "/product/:productId", Component: ProductDetails },
       { path: "/about", Component: About },
       { path: "/contact", Component: ContactUs },
+      { path: "/login", Component: SignIn },
+      { path: "/signup", Component: SignUp },
       { path: "*", Component: PageNotFound },
     ],
   },

@@ -1,5 +1,6 @@
 const About = () => {
   return (
+    <>
     <div className="py-8 h-[50vh]">
         <h1 className="text-3xl font-bold mb-4">About Us</h1>
         <p className="text-lg mb-4">
@@ -12,6 +13,7 @@ const About = () => {
             Thank you for choosing our platform for your shopping needs. We value your trust and look forward to serving you with excellence. If you have any questions or feedback, please don't hesitate to reach out to our customer support team.
         </p>
     </div>
+    </>
   )
 }
 
