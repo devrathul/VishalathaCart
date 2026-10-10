@@ -18,7 +18,7 @@ import {
     FaTruckFast,
 } from 'react-icons/fa6'
 
-const productImages = import.meta.glob('../../assets/images/*', {
+const productImages = import.meta.glob('../../assets/images/**/*', {
     eager: true,
     query: '?url',
     import: 'default',
@@ -43,7 +43,9 @@ const formatPrice = (price) => new Intl.NumberFormat('en-IN', {
     maximumFractionDigits: 0,
 }).format(price)
 
-const getImageUrl = (imageName) => productImages[`../../assets/images/${imageName}`]
+const getImageUrl = (imageName) => imageName?.startsWith('/')
+    ? imageName
+    : productImages[`../../assets/images/${imageName}`]
 
 const ProductDetailsContent = ({ product, products }) => {
     const [activeTab, setActiveTab] = useState('Description')

@@ -12,6 +12,12 @@ import ContactUs from './components/common/ContactUs'
 import PageNotFound from './components/common/PageNotFound'
 import SignIn from './components/authorization/SignIn'
 import SignUp from './components/authorization/SignUp'
+import AdminRoot from './Root/AdminRoot'
+import AdminProduct from './components/admin/AdminProduct'
+import AdminCategories from './components/admin/AdminCategories'
+import AdminCustomers from './components/admin/AdminCustomers'
+import AdminOrders from './components/admin/AdminOrders'
+import AddProduct from './components/admin/AddProduct'  
 
 const router = createBrowserRouter([
   {
@@ -26,6 +32,17 @@ const router = createBrowserRouter([
       { path: "/login", Component: SignIn },
       { path: "/signup", Component: SignUp },
       { path: "*", Component: PageNotFound },
+    ],
+  },
+  {
+    path: "/admin/",
+    Component: AdminRoot,
+    children: [
+      { path: "products", Component: AdminProduct },
+      { path: "categories", Component: AdminCategories },
+      { path: "customers", Component: AdminCustomers },
+      { path: "orders", Component: AdminOrders },
+      { path: "products/add", Component: AddProduct },
     ],
   },
 ]);

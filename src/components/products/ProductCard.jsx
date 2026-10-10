@@ -3,6 +3,7 @@ import { Link } from "react-router"
 const ProductCard = (props) => {
 
     const { products } = props
+    const imageUrl = products.image?.startsWith('/') ? products.image : `../../src/assets/images/${products.image}`
 
     return (
         <div className="w-full rounded-2xl border border-blue-100 bg-white p-3 shadow-sm">
@@ -15,7 +16,7 @@ const ProductCard = (props) => {
                         <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-2xl text-[#092b62] shadow-sm"> ♡ </button>
                     </div>
                     <img
-                        src={`../../src/assets/images/${products.image}`}
+                        src={imageUrl}
                         alt="iPhone 15 Pro"
                         className="h-45 w-45 object-contain"
                     />
