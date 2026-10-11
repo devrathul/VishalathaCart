@@ -1,11 +1,12 @@
-import {useSelector} from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { FiPlus } from "react-icons/fi";
+import {removeCategory} from '../../features/categories/categoriesSlice'
 
 
 const AdminCategories = () => {
 
-    const productList = useSelector((state) => state.productList.value);
-    console.log(productList);
+    const categoriesList = useSelector((state) => state.categories.value);
+    const dispatch = useDispatch()
 
     return (
         <div className="flex min-w-0 flex-1 flex-col">
@@ -18,76 +19,129 @@ const AdminCategories = () => {
                         </p>
                     </div>
 
-                    <button id="addProductBtn" className="flex h-[40px] items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-[13px] font-medium text-white shadow-sm transition hover:bg-blue-700">
+                    <button id="addProductBtn" className="flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-[13px] font-medium text-white shadow-sm transition hover:bg-blue-700">
                         <FiPlus className="h-5 w-5" />
                         Add Category
                     </button>
                 </section>
 
-                <section className="overflow-hidden rounded-[10px] border border-blue-100 bg-white/80">
+                <section class="rounded-xl border border-blue-100 p-4
+                        shadow-sm sm:p-5">
 
-                    <div className="filter-controls flex flex-wrap items-center gap-3 border-b border-blue-50 p-4">
+                    <div class="mb-6 grid grid-cols-1 gap-4
+                        md:grid-cols-12">
 
-                        <div className="relative min-w-[180px] flex-1">
-                            <i data-lucide="search" className="absolute left-3 top-1/2 h-[19px] w-[19px] -translate-y-1/2 text-blue-500"></i>
-                            <input
-                                id="productSearch"
-                                type="search"
-                                placeholder="Search products by name, brand, or SKU..."
-                                className="h-[39px] w-full rounded-lg border border-blue-100 bg-[#f9fcff] pl-9 pr-3 text-[13px] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
-                            />
+                        <div class="relative md:col-span-8">
+                            <svg class="absolute left-4 top-1/2 h-5 w-5
+                               -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <circle cx="11" cy="11" r="7" stroke-width="1.8"></circle>
+                                <path d="m16 16 4 4" stroke-width="1.8" stroke-linecap="round"></path>
+                            </svg>
+
+                            <input id="searchInput" type="text" placeholder="Search categories by name..."
+                                oninput="filterCategories()" class="h-12 w-full rounded-lg border
+                               border-blue-100 bg-white pl-12 pr-4
+                               text-sm outline-none transition
+                               placeholder:text-slate-400
+                               focus:border-blue-400
+                               focus:ring-2 focus:ring-blue-100" />
                         </div>
 
-                        <select id="categoryFilter" className="h-[39px] min-w-[165px] rounded-lg border border-blue-100 bg-white px-3 text-[13px] outline-none focus:border-blue-400">
-                            <option value="">All Categories</option>
-                            <option>Electronics</option>
-                            <option>Sports</option>
-                            <option>Fashion</option>
-                            <option>Computers</option>
-                            <option>Beauty</option>
-                            <option>Bags</option>
-                        </select>
+                        <div class="md:col-span-2">
+                            <select id="statusFilter" onchange="filterCategories()" class="h-12 w-full rounded-lg border
+                               border-blue-100 bg-white px-4
+                               text-sm outline-none
+                               focus:border-blue-400">
 
-                        <select id="statusFilter" className="h-[39px] min-w-[165px] rounded-lg border border-blue-100 bg-white px-3 text-[13px] outline-none focus:border-blue-400">
-                            <option value="">All Status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
-
-                        <select id="sortFilter" className="h-[39px] min-w-[175px] rounded-lg border border-blue-100 bg-white px-3 text-[13px] outline-none focus:border-blue-400">
-                            <option value="newest">Sort by: Newest First</option>
-                            <option value="name">Sort by: Name</option>
-                            <option value="priceLow">Sort by: Price Low to High</option>
-                            <option value="priceHigh">Sort by: Price High to Low</option>
-                            <option value="stock">Sort by: Stock</option>
-                        </select>
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div className="custom-scrollbar overflow-x-auto px-4 pt-3">
-                        <table className="w-full min-w-[1000px] border-collapse text-left text-[12px]">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full min-w-[760px] border-collapse
+                              text-left text-sm">
 
                             <thead>
-                                <tr className="h-[39px] rounded-lg bg-[#f2f7fc] text-[#153d7d]">
-                                    <th className="px-3 font-semibold">ID</th>
-                                    <th className="px-3 font-semibold">Product</th>
-                                    <th className="px-3 font-semibold">Category</th>
-                                    <th className="px-3 font-semibold">Price</th>
-                                    <th className="px-3 font-semibold">Stock</th>
-                                    <th className="px-3 font-semibold">Status</th>
-                                    <th className="px-3 font-semibold">Rating</th>
-                                    <th className="rounded-r-lg px-3 text-center font-semibold">Actions</th>
+                                <tr class="bg-[#f1f6fc] text-[#17477f]">
+                                    <th class="rounded-l-lg px-4 py-4 font-semibold">
+                                        ID
+                                    </th>
+
+                                    <th class="px-4 py-4 font-semibold">
+                                        Category
+                                    </th>
+
+                                    <th class="px-4 py-4 font-semibold">
+                                        Description
+                                    </th>
+
+                                    <th class="px-4 py-4 font-semibold">
+                                        Status
+                                    </th>
+
+                                    <th class="rounded-r-lg px-4 py-4 text-center
+                                       font-semibold">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
 
-                            <tbody id="productTableBody">
+                            <tbody id="categoryTable">
+                                {categoriesList.map((categor) => (
+                                    <tr class="category-row border-b border-blue-100
+                                   transition hover:bg-blue-50/40" data-id="1" data-name="Electronics"
+                                        data-status="active" key={categor.id}>
+
+                                        <td class="px-4 py-4">{categor.id}</td>
+
+                                        <td class="whitespace-nowrap px-4 py-4
+                                       font-medium text-[#123b70]">
+                                            {categor.categoryName}
+                                        </td>
+
+                                        <td class="px-4 py-4 text-[#456b9f]">
+                                            {categor.description}
+                                        </td>
+
+                                        <td class="px-4 py-4">
+                                            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${categor.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                {categor.status}
+                                            </span>
+                                        </td>
+
+                                        <td class="px-4 py-4">
+                                            <div class="flex items-center justify-center gap-4">
+                                                <button onclick="editCategory(1)" aria-label="Edit" class="text-blue-500 transition
+                                               hover:text-blue-700">
+                                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M12 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9M15 4l5 5M10 14l9-9a2.1 2.1 0 0 1 3 3l-9 9-5 1z" />
+                                                    </svg>
+                                                </button>
+
+                                                <button onClick={()=>dispatch(removeCategory(categor.id))} aria-label="Delete" class="text-red-500 transition
+                                               hover:text-red-700">
+                                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+
                             </tbody>
                         </table>
 
-                        <p id="emptyMessage" className="hidden py-12 text-center text-sm text-slate-500">
-                            No products found. Try changing your search or filters.
+                        <p id="emptyMessage" class="hidden py-10 text-center text-sm text-slate-500">
+                            No categories found.
                         </p>
                     </div>
-
                 </section>
             </main>
         </div>
