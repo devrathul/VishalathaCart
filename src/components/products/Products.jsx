@@ -5,9 +5,17 @@ import { useSelector } from 'react-redux'
 const Products = () => {
     const productList = useSelector(state => state.productList.value)
     const selectedCategories = useSelector(state => state.productList.selectedCategories)
-    const filteredProducts = selectedCategories.length
-        ? productList.filter(product => selectedCategories.includes(product.category))
-        : productList
+    const selectedPriceRange = useSelector(state => state.productList.selectedPriceRange)
+    
+    const filteredProducts = productList.filter((product) => {
+        const matchesCategory = selectedCategories.length === 0
+            || selectedCategories.includes(product.category)
+        const matchesPrice = !selectedPriceRange
+            || (product.price >= selectedPriceRange.min
+                && (selectedPriceRange.max === null || product.price < selectedPriceRange.max))
+
+        return matchesCategory && matchesPrice
+    })
     return (
         <>
             <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">

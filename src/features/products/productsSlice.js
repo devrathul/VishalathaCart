@@ -341,7 +341,7 @@ const products = [
         "brand": "FreshMart",
         "category": "Groceries",
         "subcategory": "Organic Food",
-        "sku": "FM-OGB-12PCS",       
+        "sku": "FM-OGB-12PCS",
         "price": 1499,
         "originalPrice": 1799,
         "discount": 17,
@@ -395,14 +395,15 @@ const products = [
 export const productsSlice = createSlice({
     name: 'productList',
     initialState: {
-        value: products,        
-        selectedCategories: []
+        value: products,
+        selectedCategories: [],
+        selectedPriceRange: null
     },
     reducers: {
-        addProduct: (state,action) => {
+        addProduct: (state, action) => {
             state.value = [...state.value, action.payload]
         },
-        deleteProduct  : (state, action) => {
+        deleteProduct: (state, action) => {
             const productId = action.payload;
             state.value = state.value.filter(product => product.id !== productId);
         },
@@ -419,12 +420,19 @@ export const productsSlice = createSlice({
                 ? state.selectedCategories.filter(selectedCategory => selectedCategory !== category)
                 : [...state.selectedCategories, category]
         },
+        togglePrice: (state, action) => {
+            const { min, max } = action.payload
+            const isSelected = state.selectedPriceRange?.min === min
+                && state.selectedPriceRange?.max === max
+            state.selectedPriceRange = isSelected ? null : { min, max }
+        },
         clearCategoryFilters: (state) => {
             state.selectedCategories = []
+            state.selectedPriceRange = null
         }
     }
 })
 
-export const { addToCart, toggleCategory, clearCategoryFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
+export const { addToCart, toggleCategory, togglePrice, clearCategoryFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
 
 export default productsSlice.reducer

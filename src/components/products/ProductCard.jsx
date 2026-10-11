@@ -32,7 +32,7 @@ const ProductCard = (props) => {
                         ★ ★ ★ ★ ★
                     </div>
                     <span className="ml-2 text-sm font-medium text-slate-400">
-                        ({products.reviewCount})
+                        ({products.rating})
                     </span>
                 </div>
                 <div className="mt-3 flex items-center gap-3">
