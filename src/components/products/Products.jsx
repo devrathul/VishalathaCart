@@ -6,15 +6,14 @@ const Products = () => {
     const productList = useSelector(state => state.productList.value)
     const selectedCategories = useSelector(state => state.productList.selectedCategories)
     const selectedPriceRange = useSelector(state => state.productList.selectedPriceRange)
-    
-    const filteredProducts = productList.filter((product) => {
-        const matchesCategory = selectedCategories.length === 0
-            || selectedCategories.includes(product.category)
-        const matchesPrice = !selectedPriceRange
-            || (product.price >= selectedPriceRange.min
-                && (selectedPriceRange.max === null || product.price < selectedPriceRange.max))
+    const selectedBrand = useSelector(state => state.productList.selectedBrand)
 
-        return matchesCategory && matchesPrice
+    const filteredProducts = productList.filter((product) => {
+        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category)
+        const matchesPrice = !selectedPriceRange || (product.price >= selectedPriceRange.min && (selectedPriceRange.max === null || product.price < selectedPriceRange.max))
+        const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(product.brand)
+
+        return matchesCategory && matchesPrice && matchesBrand
     })
     return (
         <>

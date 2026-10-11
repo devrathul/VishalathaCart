@@ -397,7 +397,8 @@ export const productsSlice = createSlice({
     initialState: {
         value: products,
         selectedCategories: [],
-        selectedPriceRange: null
+        selectedPriceRange: null,
+        selectedBrand: []
     },
     reducers: {
         addProduct: (state, action) => {
@@ -426,6 +427,10 @@ export const productsSlice = createSlice({
                 && state.selectedPriceRange?.max === max
             state.selectedPriceRange = isSelected ? null : { min, max }
         },
+        toggleBrand: (state, action) => {
+            const brand = action.payload
+            state.selectedBrand = state.selectedBrand.includes(brand) ? state.selectedBrand.filter(brand => brand !== brand) : [...state.selectedBrand, brand]
+        },
         clearCategoryFilters: (state) => {
             state.selectedCategories = []
             state.selectedPriceRange = null
@@ -433,6 +438,6 @@ export const productsSlice = createSlice({
     }
 })
 
-export const { addToCart, toggleCategory, togglePrice, clearCategoryFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
+export const { addToCart, toggleCategory, togglePrice, toggleBrand, clearCategoryFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
 
 export default productsSlice.reducer
