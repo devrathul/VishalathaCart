@@ -1,10 +1,24 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { AiOutlineProduct, AiOutlineShoppingCart } from "react-icons/ai";
 import { BiCategory } from "react-icons/bi";
 import { IoPersonOutline, IoLogOutOutline } from "react-icons/io5";
 import footerlogo from '/images/logo-footer.png'
+import Cookies from 'js-cookie'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../features/auth/authSlice'
+
 
 const AdminHeader = () => {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const onLogOut = () => {
+        Cookies.remove('loginProfile')
+        dispatch(setUser(null))
+        navigate("/")
+    }
+
     return (
         <aside className="bg-[#0b2648] text-white flex w-[252px] min-w-[252px] flex-col text-white">
 
@@ -15,7 +29,13 @@ const AdminHeader = () => {
             </div>
 
             <nav className="nav-menu flex-1 space-y-1 px-3.5 py-4">
-                <Link to="/admin/products" className="nav-link flex items-center gap-5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 text-[14px] font-medium shadow-lg shadow-blue-950/20">
+
+                <Link to="/admin" className="nav-link flex items-center gap-5 rounded-lg px-4 py-3 text-[14px] text-slate-200 hover:bg-white/10">
+                    <AiOutlineProduct className="h-5.5 w-5.5 shrink-0" />
+                    <span className="nav-label">Dashboard</span>
+                </Link>
+
+                <Link to="/admin/products" className="nav-link flex items-center gap-5 rounded-lg px-4 py-3 text-[14px] text-slate-200 hover:bg-white/10">
                     <AiOutlineProduct className="h-5.5 w-5.5 shrink-0" />
                     <span className="nav-label">Products</span>
                 </Link>
@@ -36,9 +56,10 @@ const AdminHeader = () => {
                 </Link>
             </nav>
 
-            <div className="logout-area mx-5 flex items-center gap-5 border-t border-blue-400/30 py-5">
-                <IoLogOutOutline className="h-5.5 w-5.5 shrink-0" />
-                <button className="logout-label text-sm hover:text-blue-300">Logout</button>
+            <div className="logout-area mx-5 border-t border-blue-400/30 py-5">
+                <button className=" flex items-center gap-5 logout-label text-sm hover:text-blue-300 cursor-pointer" onClick={onLogOut}>
+                    <IoLogOutOutline className="h-5.5 w-5.5 shrink-0" /> Logout
+                </button>
             </div>
 
         </aside>

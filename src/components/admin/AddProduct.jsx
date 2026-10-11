@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct, updateProduct } from '../../features/products/productsSlice'
 import '../../assets/style/addproduct.css'
@@ -53,7 +53,7 @@ const getProductSpecifications = (product) => Object.entries(product?.specificat
     value: String(value ?? '')
 }))
 
-const ProductForm = ({ productId, productToEdit, productList }) => {
+const ProductForm = ({ productId, productToEdit, productList, categoryList }) => {
     const dispatch = useDispatch()
 
     const [selectedImages, setSelectedImages] = useState(() => {
@@ -64,8 +64,6 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [colors, setColors] = useState(() => productToEdit?.colors ?? [])
     const [specifications, setSpecifications] = useState(() => getProductSpecifications(productToEdit))
-    const descriptionRef = useRef(null)
-
     const [formData, setFormData] = useState(() => getFormState(productToEdit))
 
     const [descriptionCount, setDescriptionCount] = useState((productToEdit?.description ?? '').trim().length)
@@ -78,19 +76,13 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
         }))
     }
 
-    const handleDescriptionChange = () => {
-        const htmlContent = descriptionRef.current?.innerHTML ?? ''
-        const plainText = descriptionRef.current?.innerText ?? ''
+    const handleDescriptionChange = (event) => {
+        const description = event.target.value
         setFormData((previous) => ({
             ...previous,
-            description: htmlContent
+            description
         }))
-        setDescriptionCount(plainText.replace(/\s+/g, ' ').trim().length)
-    }
-
-    const handleFormat = (command) => {
-        document.execCommand(command, false, null)
-        handleDescriptionChange()
+        setDescriptionCount(description.length)
     }
 
     const handleImageUpload = (event) => {
@@ -225,9 +217,7 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
                 isNew: Boolean(formData.isNew),
                 isBestSeller: Boolean(formData.isBestSeller),
                 colors: cleanedColors,
-                description: descriptionRef.current
-                    ? descriptionRef.current.innerText.replace(/\s+/g, ' ').trim()
-                    : formData.description || '',
+                description: (formData.description ?? '').trim(),
                 specifications: cleanedSpecifications
             }
 
@@ -244,9 +234,6 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
                 setSelectedImages([])
                 setSelectedFiles([])
 
-                if (descriptionRef.current) {
-                    descriptionRef.current.innerHTML = ''
-                }
                 setDescriptionCount(0)
             }
         } catch (error) {
@@ -267,9 +254,6 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
         setSelectedFiles([])
         setMessage('')
 
-        if (descriptionRef.current) {
-            descriptionRef.current.innerHTML = nextFormState.description || ''
-        }
         setDescriptionCount((nextFormState.description ?? '').trim().length)
     }
 
@@ -366,13 +350,14 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
                                     <label className="field-label" htmlFor="category">Category <span className="text-red-500">*</span></label>
                                     <select className="field" id="category" name="category" value={formData.category} onChange={handleInputChange} required>
                                         <option value="">Select a category</option>
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Fashion">Fashion</option>
-                                        <option value="Home & Living">Home &amp; Living</option>
-                                        <option value="Beauty & Health">Beauty &amp; Health</option>
-                                        <option value="Sports & Outdoors">Sports &amp; Outdoors</option>
-                                        <option value="Toys & Games">Toys &amp; Games</option>
-                                        <option value="Groceries">Groceries</option>
+                                        {categoryList.map((category) => {
+                                            if (category.status === "Active") {
+                                                return (
+                                                    <option value={category.categoryName} key={category.id}>{category.categoryName}</option>
+                                                )
+                                            }
+                                        }
+                                        )}
                                     </select>
                                 </div>
                                 <div>
@@ -435,7 +420,6 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
                                 <label className="field-label" htmlFor="status">Status <span className="text-red-500">*</span></label>
                                 <select className="field" id="status" name="status" value={formData.status} onChange={handleInputChange}>
                                     <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
                                     <option value="InActive">InActive</option>
                                     <option value="Pending">Pending</option>
                                 </select>
@@ -472,7 +456,7 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
 
                         <div id="colorsList" className="flex flex-wrap gap-1.5">
                             {colors.map((color, index) => (
-                                <div key={`${color}-${index}`} className="custom-row flex w-full items-center gap-2">
+                                <div key={index} className="custom-row flex w-full items-center gap-2">
                                     <input
                                         type="text"
                                         value={color}
@@ -535,26 +519,16 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
                     <section className="panel min-w-0 p-3">
                         <h2 className="section-title mb-3">Product Description</h2>
 
-                        <div className="overflow-hidden rounded-md border border-[#cfe3ff]">
-                            <div className="flex flex-wrap items-center gap-1 border-b border-[#dceaff] bg-[#f9fbff] p-2">
-                                <button type="button" className="format-btn px-1.5 font-bold" title="Bold" onMouseDown={(event) => event.preventDefault()} onClick={() => handleFormat('bold')}>B</button>
-                                <button type="button" className="format-btn px-1.5 italic" title="Italic" onMouseDown={(event) => event.preventDefault()} onClick={() => handleFormat('italic')}>I</button>
-                                <button type="button" className="format-btn px-1.5 underline" title="Underline" onMouseDown={(event) => event.preventDefault()} onClick={() => handleFormat('underline')}>U</button>
-                            </div>
-
-                            <div
-                                ref={descriptionRef}
-                                contentEditable="true"
-                                suppressContentEditableWarning
-                                className="min-h-[140px] p-3 text-xs leading-5 text-[#173d70] outline-none"
-                                data-placeholder="Enter detailed product description..."
-                                onInput={handleDescriptionChange}
-                                dangerouslySetInnerHTML={{ __html: formData.description }}
-                            />
-                        </div>
-                        <p className="mt-1 text-right text-[10px] muted">
-                            <span id="descriptionCount">{descriptionCount}</span>/1000
-                        </p>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows={6}
+                            maxLength={1000}
+                            value={formData.description ?? ''}
+                            onChange={handleDescriptionChange}
+                            placeholder="Enter product description..."
+                            className="w-full resize-y rounded-md border border-[#cfe3ff] p-3 text-xs leading-5 text-[#173d70] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                        />
                     </section>
                 </div>
 
@@ -579,6 +553,7 @@ const ProductForm = ({ productId, productToEdit, productList }) => {
 
 const AddProduct = () => {
     const productList = useSelector((state) => state.productList.value)
+    const categoryList = useSelector((state) => state.categories.value)
     const { productId } = useParams()
     const productToEdit = productId
         ? productList.find((product) => String(product.id) === String(productId))
@@ -590,6 +565,7 @@ const AddProduct = () => {
             productId={productId}
             productToEdit={productToEdit}
             productList={productList}
+            categoryList={categoryList}
         />
     )
 }

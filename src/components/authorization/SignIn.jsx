@@ -51,7 +51,13 @@ const SignIn = () => {
             Cookies.set('loginProfile', JSON.stringify(loginProfile), { expires: 7 })
 
             dispatch(setUser(loginProfile))
-            navigate('/')
+
+            if(loginProfile.role === 'admin'){
+                navigate('/admin/products')
+            } else {
+                navigate('/')
+            }
+            
         }
     }
 
