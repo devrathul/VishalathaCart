@@ -43,6 +43,7 @@ const router = createBrowserRouter([
       { path: "customers", Component: AdminCustomers },
       { path: "orders", Component: AdminOrders },
       { path: "products/add", Component: AddProduct },
+      { path: "product/:productId", Component: AddProduct },
     ],
   },
 ]);

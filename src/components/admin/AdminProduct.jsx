@@ -87,7 +87,7 @@ const AdminProduct = () => {
 
                             <tbody id="productTableBody">
                                 {productList.map((product) => (
-                                    <tr key={product.id} className="h-[39px] border-b border-blue-100 hover:bg-blue-50">
+                                    <tr key={product.id} className="h-12.5 border-b border-blue-100 hover:bg-blue-50">
                                         <td className="px-3">{product.id}</td>
                                         <td className="px-3">{product.name}</td>
                                         <td className="px-3">{product.category}</td>
@@ -99,10 +99,10 @@ const AdminProduct = () => {
                                             </span>
                                         </td>
                                         <td className="px-3">{product.rating}</td>
-                                        <td className="rounded-r-lg px-3 text-center">
-                                            <button className="text-blue-600 hover:text-blue-900" onClick={() => console.log(`Edit product with ID: ${product.id}`)}>
+                                        <td className="rounded-r-lg px-3 text-center flex items-center align-center justify-center h-12.5 gap-5">
+                                            <Link className="text-blue-600 hover:text-blue-900" to={`/admin/product/${product.id}`}>
                                                 <FiEdit className="h-5 w-5" />
-                                            </button>
+                                            </Link>
                                             <button className="ml-2 text-red-600 hover:text-red-900" onClick={() => dispatch(deleteProduct(product.id))}>
                                                 <MdOutlineDelete className="h-5 w-5" />
                                             </button>

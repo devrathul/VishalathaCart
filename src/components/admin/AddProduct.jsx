@@ -1,12 +1,32 @@
 import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProduct } from '../../features/products/productsSlice'
+import { addProduct, updateProduct } from '../../features/products/productsSlice'
 import '../../assets/style/addproduct.css'
+import { Link, useParams } from 'react-router'
 
-const initialFormState = {}
+const productImageAssets = import.meta.glob('../../assets/images/**/*', {
+    eager: true,
+    query: '?url',
+    import: 'default',
+})
 
-const defaultColors = []
-const defaultSpecifications = []
+
+const emptyFormState = {
+    name: '',
+    brand: '',
+    category: '',
+    subcategory: '',
+    sku: '',
+    price: '',
+    originalPrice: '',
+    discount: '',
+    stock: '',
+    status: 'Active',
+    isFeatured: false,
+    isNew: false,
+    isBestSeller: false,
+    description: ''
+}
 
 const createSpecification = () => ({
     id: Date.now() + Math.random(),
@@ -14,19 +34,41 @@ const createSpecification = () => ({
     value: ''
 })
 
-const AddProduct = () => {
-    const dispatch = useDispatch()
-    const productList = useSelector((state) => state.productList.value)
-    const descriptionRef = useRef(null)
+const getFormState = (product) => ({ ...emptyFormState, ...product })
 
-    const [formData, setFormData] = useState(initialFormState)
-    const [colors, setColors] = useState(defaultColors)
-    const [specifications, setSpecifications] = useState(defaultSpecifications)
-    const [selectedImages, setSelectedImages] = useState([])
+const getProductImages = (product) => {
+    if (product?.images?.length) {
+        return product.images
+    }
+    return product?.image ? [product.image] : []
+}
+
+const getProductImageUrl = (image) => image?.startsWith('/')
+    ? image
+    : productImageAssets[`../../assets/images/${image}`] || image
+
+const getProductSpecifications = (product) => Object.entries(product?.specifications ?? {}).map(([field, value]) => ({
+    ...createSpecification(),
+    field,
+    value: String(value ?? '')
+}))
+
+const ProductForm = ({ productId, productToEdit, productList }) => {
+    const dispatch = useDispatch()
+
+    const [selectedImages, setSelectedImages] = useState(() => {
+        return getProductImages(productToEdit)
+    })
     const [selectedFiles, setSelectedFiles] = useState([])
     const [message, setMessage] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [descriptionCount, setDescriptionCount] = useState((initialFormState.description ?? '').trim().length)
+    const [colors, setColors] = useState(() => productToEdit?.colors ?? [])
+    const [specifications, setSpecifications] = useState(() => getProductSpecifications(productToEdit))
+    const descriptionRef = useRef(null)
+
+    const [formData, setFormData] = useState(() => getFormState(productToEdit))
+
+    const [descriptionCount, setDescriptionCount] = useState((productToEdit?.description ?? '').trim().length)
 
     const handleInputChange = (event) => {
         const { name, value, type, checked } = event.target
@@ -116,8 +158,14 @@ const AddProduct = () => {
             formData.stock
         ]
 
-        if (requiredFields.some((value) => !value || value === '0')) {
+        if (requiredFields.some((value) => value === '' || value === null || value === undefined)) {
             setMessage('Please fill in all required product fields.')
+            return
+        }
+
+        if (!Number.isFinite(Number(formData.price)) || Number(formData.price) < 0
+            || !Number.isFinite(Number(formData.stock)) || Number(formData.stock) < 0) {
+            setMessage('Price and stock must be valid non-negative numbers.')
             return
         }
 
@@ -156,8 +204,10 @@ const AddProduct = () => {
                 return result
             }, {})
 
-            const newProduct = {
-                id: largestId + 1,
+            const existingImages = getProductImages(productToEdit)
+            const product = {
+                ...(productToEdit ?? {}),
+                id: productToEdit?.id ?? largestId + 1,
                 name: (formData.name ?? '').trim(),
                 brand: (formData.brand ?? '').trim(),
                 category: formData.category ?? '',
@@ -166,68 +216,93 @@ const AddProduct = () => {
                 price: Number(formData.price),
                 originalPrice: Number(formData.originalPrice || formData.price),
                 discount: Number(formData.discount || 0),
-                rating: 4.5,
+                rating: productToEdit?.rating ?? 4.5,
                 stock: Number(formData.stock),
-                image: uploadedImages[0]?.url || 'default-product.png',
-                images: uploadedImages.map((image) => image.url),
+                image: uploadedImages[0]?.url || existingImages[0] || 'default-product.png',
+                images: uploadedImages.length ? uploadedImages.map((image) => image.url) : existingImages,
                 status: formData.status ?? 'Active',
                 isFeatured: Boolean(formData.isFeatured),
                 isNew: Boolean(formData.isNew),
                 isBestSeller: Boolean(formData.isBestSeller),
                 colors: cleanedColors,
-                description: descriptionRef.current?.innerText?.replace(/\s+/g, ' ').trim() || formData.description || '',
+                description: descriptionRef.current
+                    ? descriptionRef.current.innerText.replace(/\s+/g, ' ').trim()
+                    : formData.description || '',
                 specifications: cleanedSpecifications
             }
 
-            dispatch(addProduct(newProduct))
-            setMessage('Product added successfully.')
+            if (productToEdit) {
+                dispatch(updateProduct(product))
+                setMessage('Product updated successfully.')
+            } else {
+                dispatch(addProduct(product))
+                setMessage('Product added successfully.')
 
-            setFormData(initialFormState)
-            setColors(defaultColors)
-            setSpecifications(defaultSpecifications)
-            setSelectedImages([])
-            setSelectedFiles([])
+                setFormData(emptyFormState)
+                setColors([])
+                setSpecifications([])
+                setSelectedImages([])
+                setSelectedFiles([])
 
-            if (descriptionRef.current) {
-                descriptionRef.current.innerHTML = initialFormState.description || ''
+                if (descriptionRef.current) {
+                    descriptionRef.current.innerHTML = ''
+                }
+                setDescriptionCount(0)
             }
-            setDescriptionCount((initialFormState.description ?? '').trim().length)
         } catch (error) {
-            setMessage(error instanceof Error ? error.message : 'Unable to add product.')
+            setMessage(error instanceof Error
+                ? error.message
+                : `Unable to ${productToEdit ? 'update' : 'add'} product.`)
         } finally {
             setIsSubmitting(false)
         }
     }
 
     const cancelForm = () => {
-        setFormData(initialFormState)
-        setColors(defaultColors)
-        setSpecifications(defaultSpecifications)
-        setSelectedImages([])
+        const nextFormState = getFormState(productToEdit)
+        setFormData(nextFormState)
+        setColors(productToEdit?.colors ?? [])
+        setSpecifications(getProductSpecifications(productToEdit))
+        setSelectedImages(getProductImages(productToEdit))
         setSelectedFiles([])
         setMessage('')
 
         if (descriptionRef.current) {
-            descriptionRef.current.innerHTML = initialFormState.description
+            descriptionRef.current.innerHTML = nextFormState.description || ''
         }
-        setDescriptionCount((initialFormState.description ?? '').trim().length)
+        setDescriptionCount((nextFormState.description ?? '').trim().length)
+    }
+
+    if (productId && !productToEdit) {
+        return (
+            <main className="w-full p-3 sm:p-5">
+                <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+                    Product not found.
+                </p>
+                <Link className="mt-4 inline-block text-sm text-blue-600 hover:underline" to="/admin/products">
+                    Back to products
+                </Link>
+            </main>
+        )
     }
 
     return (
         <main className="w-full p-3 sm:p-5">
             <header className="mb-5">
                 <h1 className="text-2xl font-bold tracking-tight text-[#123763] sm:text-[30px]">
-                    Add Product
+                    {productToEdit ? 'Update Product' : 'Add Product'}
                 </h1>
                 <p className="mt-1 text-sm text-[#6487b8]">
-                    Fill in the details below to add a new product to your store.
+                    {productToEdit
+                        ? 'Update the product details below.'
+                        : 'Fill in the details below to add a new product to your store.'}
                 </p>
             </header>
 
             <form id="productForm" className="space-y-3" onSubmit={handleSubmit}>
-
+                <input type="hidden" name="productId" value={productId || ''} />
                 {message ? (
-                    <p role="status" className={`rounded-md p-3 text-sm ${message === 'Product added successfully.' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>{message}</p>
+                    <p role="status" className={`rounded-md p-3 text-sm ${message.includes('successfully.') ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>{message}</p>
                 ) : null}
 
                 <div className="top-layout product-layout grid grid-cols-1 gap-3 xl:grid-cols-[1fr_1fr]">
@@ -237,7 +312,7 @@ const AddProduct = () => {
                         <div className="mb-3 flex flex-wrap items-start gap-2.5">
                             <div className="upload-tile h-[125px] w-[125px] shrink-0 overflow-hidden rounded-md">
                                 {selectedImages[0] ? (
-                                    <img src={selectedImages[0]} alt="Main product preview" className="h-full w-full object-cover" />
+                                    <img src={getProductImageUrl(selectedImages[0])} alt="Main product preview" className="h-full w-full object-cover" />
                                 ) : (
                                     <div className="text-center">
                                         <div className="text-4xl text-slate-300">▧</div>
@@ -253,7 +328,7 @@ const AddProduct = () => {
                                 </label>
                                 {selectedImages.slice(1).map((image, index) => (
                                     <div key={`${image}-${index}`} className="upload-tile h-[76px] w-[68px] overflow-hidden rounded-md">
-                                        <img src={image} alt="Product preview" className="h-full w-full object-cover" />
+                                        <img src={getProductImageUrl(image)} alt="Product preview" className="h-full w-full object-cover" />
                                     </div>
                                 ))}
                             </div>
@@ -290,6 +365,7 @@ const AddProduct = () => {
                                 <div>
                                     <label className="field-label" htmlFor="category">Category <span className="text-red-500">*</span></label>
                                     <select className="field" id="category" name="category" value={formData.category} onChange={handleInputChange} required>
+                                        <option value="">Select a category</option>
                                         <option value="Electronics">Electronics</option>
                                         <option value="Fashion">Fashion</option>
                                         <option value="Home & Living">Home &amp; Living</option>
@@ -360,6 +436,8 @@ const AddProduct = () => {
                                 <select className="field" id="status" name="status" value={formData.status} onChange={handleInputChange}>
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
+                                    <option value="InActive">InActive</option>
+                                    <option value="Pending">Pending</option>
                                 </select>
                             </div>
 
@@ -486,13 +564,33 @@ const AddProduct = () => {
                     </button>
 
                     <button type="submit" disabled={isSubmitting} className="rounded-md bg-[#087bff] px-5 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">
-                        <span className="mr-1 text-base">+</span> {isSubmitting ? 'Uploading...' : 'Add Product'}
+                        <span className="mr-1 text-base">{productToEdit ? '✓' : '+'}</span>
+                        {isSubmitting
+                            ? (selectedFiles.length ? 'Uploading...' : 'Saving...')
+                            : (productToEdit ? 'Update Product' : 'Add Product')}
                     </button>
                 </div>
 
 
             </form>
         </main>
+    )
+}
+
+const AddProduct = () => {
+    const productList = useSelector((state) => state.productList.value)
+    const { productId } = useParams()
+    const productToEdit = productId
+        ? productList.find((product) => String(product.id) === String(productId))
+        : undefined
+
+    return (
+        <ProductForm
+            key={productId ?? 'new'}
+            productId={productId}
+            productToEdit={productToEdit}
+            productList={productList}
+        />
     )
 }
 
