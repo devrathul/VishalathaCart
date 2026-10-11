@@ -37,7 +37,7 @@ const userList = [
         "role": "customer",
         "status": "active",
         "profile": {
-            "avatar": "",
+            "image": "",
             "gender": null,
             "dateOfBirth": null,
             "address": {
@@ -63,9 +63,13 @@ export const usersSlice = createSlice({
         setUsers: (state, action) => {
             state.value = [...state.value, action.payload]
         },
+        removeUser: (state, action) => {
+            const userID = action.payload
+            state.value = state.value.filter(user => user.id !== userID)
+        }
     },
 })
 
-export const { setUsers } = usersSlice.actions
+export const { setUsers, removeUser } = usersSlice.actions
 
 export default usersSlice.reducer
