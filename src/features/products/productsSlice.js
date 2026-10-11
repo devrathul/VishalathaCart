@@ -11,7 +11,7 @@ const products = [
         "price": 124900,
         "originalPrice": 149900,
         "discount": 17,
-        "rating": 4.8,
+        "rating": 5,
         "stock": 25,
         "image": "iphone.png",
         "status": "Active",
@@ -398,7 +398,8 @@ export const productsSlice = createSlice({
         value: products,
         selectedCategories: [],
         selectedPriceRange: null,
-        selectedBrand: []
+        selectedBrand: [],
+        selectedRating: []
     },
     reducers: {
         addProduct: (state, action) => {
@@ -431,13 +432,22 @@ export const productsSlice = createSlice({
             const brand = action.payload
             state.selectedBrand = state.selectedBrand.includes(brand) ? state.selectedBrand.filter(brand => brand !== brand) : [...state.selectedBrand, brand]
         },
-        clearCategoryFilters: (state) => {
+        toggleRating: (state, action) => {
+            const rating = Number(action.payload)
+            state.selectedRating = state.selectedRating.includes(rating)
+                ? state.selectedRating.filter(selectedRating => selectedRating !== rating)
+                : [...state.selectedRating, rating]
+        },
+        clearFilters: (state) => {
             state.selectedCategories = []
             state.selectedPriceRange = null
+            state.selectedBrand = []
+            state.selectedRating = []
         }
     }
 })
 
-export const { addToCart, toggleCategory, togglePrice, toggleBrand, clearCategoryFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
+export const { addToCart, toggleCategory, togglePrice, toggleBrand, toggleRating,
+    clearFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
 
 export default productsSlice.reducer

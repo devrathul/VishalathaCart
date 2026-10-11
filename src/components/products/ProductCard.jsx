@@ -1,10 +1,10 @@
 import { Link } from "react-router"
+import Rating from "../common/Rating"
 
 const ProductCard = (props) => {
 
     const { products } = props
     const imageUrl = products.image?.startsWith('/') ? products.image : `../../src/assets/images/${products.image}`
-
     return (
         <div className="w-full rounded-2xl border border-blue-100 bg-white p-3 shadow-sm">
             <Link to={`/product/${products.id}`} className="flex flex-col items-center justify-center gap-3">
@@ -26,12 +26,9 @@ const ProductCard = (props) => {
                 </div>
             </Link>
             <div className="px-2 pt-3">
-
-                <div className="mt-1 flex items-center gap-1">
-                    <div className="flex text-[18px] leading-none text-amber-400">
-                        ★ ★ ★ ★ ★
-                    </div>
-                    <span className="ml-2 text-sm font-medium text-slate-400">
+                <div className="flex items-center gap-2">
+                    <Rating rating={products.rating} />
+                    <span className="text-sm text-slate-500">
                         ({products.rating})
                     </span>
                 </div>

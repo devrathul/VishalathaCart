@@ -4,7 +4,7 @@ import ProductBrand from './ProductBrand'
 import ProductRating from './ProductRating'
 import ProductColor from './ProductColor'
 import { useDispatch } from 'react-redux'
-import { clearCategoryFilters } from '../../features/products/productsSlice'
+import { clearFilters } from '../../features/products/productsSlice'
 
 const ProductFilter = () => {
     const dispatch = useDispatch()
@@ -15,7 +15,7 @@ const ProductFilter = () => {
                 <h2 className="flex items-center gap-2 font-bold text-[#0b3d73]">
                     <span className="text-brand-500">☷</span> Filters
                 </h2>
-                <button type="button" className="text-xs font-medium text-brand-600" onClick={() => dispatch(clearCategoryFilters())}>Clear All</button>
+                <button type="button" className="text-xs font-medium text-brand-600" onClick={() => dispatch(clearFilters())}>Clear All</button>
             </div>
 
             <ProductCategory />

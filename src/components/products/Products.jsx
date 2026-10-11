@@ -7,13 +7,21 @@ const Products = () => {
     const selectedCategories = useSelector(state => state.productList.selectedCategories)
     const selectedPriceRange = useSelector(state => state.productList.selectedPriceRange)
     const selectedBrand = useSelector(state => state.productList.selectedBrand)
+    const selectedRating = useSelector(state => state.productList.selectedRating)
 
     const filteredProducts = productList.filter((product) => {
+
         const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category)
+
         const matchesPrice = !selectedPriceRange || (product.price >= selectedPriceRange.min && (selectedPriceRange.max === null || product.price < selectedPriceRange.max))
+
         const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(product.brand)
 
-        return matchesCategory && matchesPrice && matchesBrand
+        const productRating = Number(product.rating)
+        const matchesRating = selectedRating.length === 0
+            || (Number.isFinite(productRating) && selectedRating.some(minRating => productRating >= minRating))
+
+        return matchesCategory && matchesPrice && matchesBrand && matchesRating
     })
     return (
         <>
