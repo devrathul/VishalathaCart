@@ -8,6 +8,7 @@ const Products = () => {
     const selectedPriceRange = useSelector(state => state.productList.selectedPriceRange)
     const selectedBrand = useSelector(state => state.productList.selectedBrand)
     const selectedRating = useSelector(state => state.productList.selectedRating)
+    const selectedColors = useSelector(state => state.productList.selectedColors)
 
     const filteredProducts = productList.filter((product) => {
 
@@ -21,7 +22,11 @@ const Products = () => {
         const matchesRating = selectedRating.length === 0
             || (Number.isFinite(productRating) && selectedRating.some(minRating => productRating >= minRating))
 
-        return matchesCategory && matchesPrice && matchesBrand && matchesRating
+        const productColors = Array.isArray(product.colors) ? product.colors : []
+        const matchesColor = selectedColors.length === 0
+            || selectedColors.some(color => productColors.includes(color))
+
+        return matchesCategory && matchesPrice && matchesBrand && matchesRating && matchesColor
     })
     return (
         <>

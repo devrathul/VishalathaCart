@@ -399,7 +399,8 @@ export const productsSlice = createSlice({
         selectedCategories: [],
         selectedPriceRange: null,
         selectedBrand: [],
-        selectedRating: []
+        selectedRating: [],
+        selectedColors: []
     },
     reducers: {
         addProduct: (state, action) => {
@@ -438,16 +439,23 @@ export const productsSlice = createSlice({
                 ? state.selectedRating.filter(selectedRating => selectedRating !== rating)
                 : [...state.selectedRating, rating]
         },
+        toggleColor: (state, action) => {
+            const color = action.payload
+            state.selectedColors = state.selectedColors.includes(color)
+                ? state.selectedColors.filter(selectedColor => selectedColor !== color)
+                : [...state.selectedColors, color]
+        },
         clearFilters: (state) => {
             state.selectedCategories = []
             state.selectedPriceRange = null
             state.selectedBrand = []
             state.selectedRating = []
+            state.selectedColors = []
         }
     }
 })
 
-export const { addToCart, toggleCategory, togglePrice, toggleBrand, toggleRating,
+export const { addToCart, toggleCategory, togglePrice, toggleBrand, toggleRating, toggleColor,
     clearFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
 
 export default productsSlice.reducer
