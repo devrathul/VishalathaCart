@@ -20,6 +20,7 @@ import AdminOrders from './components/admin/AdminOrders'
 import AddProduct from './components/admin/AddProduct'  
 import AdminProfile from './components/admin/AdminProfile'
 import Wishlist from './components/wishlist/Wishlist'
+import ViewCart from './components/cart/ViewCart'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: "/products", Component: Products },
       { path: "/product/:productId", Component: ProductDetails },
       { path: "/wishlist", Component: Wishlist },
+      { path: "/cart", Component: ViewCart},
       { path: "/about", Component: About },
       { path: "/contact", Component: ContactUs },
       { path: "/login", Component: SignIn },
