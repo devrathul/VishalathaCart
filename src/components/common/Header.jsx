@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router'
 import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
-import { FaCartShopping, FaRegCircleUser } from "react-icons/fa6";
+import { FaCartShopping, FaHeart, FaRegCircleUser } from "react-icons/fa6";
 import logo from '/images/logo.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { setUser } from '../../features/auth/authSlice'
@@ -15,6 +15,7 @@ const Header = () => {
     };
 
     const user = useSelector(state => state.auth.user)
+    const wishlistCount = useSelector(state => state.wishlists.value.length)
 
     const isLoggedIn = Cookies.get('loginProfile') ? true : false
 
@@ -104,6 +105,17 @@ const Header = () => {
                                 )}
                             </li>
                             <li>
+                                <Link aria-label={`Wishlist, ${wishlistCount} items`} className='relative flex items-center gap-2 text-[#031d44]' to="/wishlist">
+                                    <FaHeart color="#031d44" size={22} />
+                                    <span>Wishlist</span>
+                                    {wishlistCount > 0 && (
+                                        <span className="absolute -right-3 -top-2 grid h-5 min-w-5 place-items-center rounded-full bg-rose-500 px-1 text-xs text-white">
+                                            {wishlistCount}
+                                        </span>
+                                    )}
+                                </Link>
+                            </li>
+                            <li>
                                 <Link className='flex gap-4 text-[#031d44]' to="/cart"><FaCartShopping color="#031d44" size={25} /></Link>
                             </li>
                         </ul>
@@ -134,7 +146,7 @@ const Header = () => {
                     <ul
                         className={
                             nav
-                                ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-200 shadow-2xl bg-white text-[#031d44] ease-in-out duration-500 font-medium'
+                                ? 'fixed z-10 md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-200 shadow-2xl bg-white text-[#031d44] ease-in-out duration-500 font-medium'
                                 : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'
                         }
                     >
@@ -143,6 +155,9 @@ const Header = () => {
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
                             <Link to="/products"> Shop </Link>
+                        </li>
+                        <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
+                            <Link className='flex items-center gap-3' to="/wishlist"><FaHeart size={20} /><span>Wishlist ({wishlistCount})</span></Link>
                         </li>
                         <li className='p-4 border-b-gray-400 duration-300 hover:text-[#0162fc] cursor-pointer'>
                             <Link to="/about"> About </Link>

@@ -6,6 +6,7 @@ import {useState} from 'react'
 const Products = () => {
 
     const [searchItem,setSearchItem] = useState('')
+    const [sortOption, setSortOption] = useState('0')
     const productList = useSelector(state => state.productList.value)
     const selectedCategories = useSelector(state => state.productList.selectedCategories)
     const selectedPriceRange = useSelector(state => state.productList.selectedPriceRange)
@@ -41,16 +42,50 @@ const Products = () => {
 
         return matchesSearch && matchesCategory && matchesPrice && matchesBrand && matchesRating && matchesColor
     })
+
+    const sortedProducts = [...filteredProducts].sort((productA, productB) => {
+        const ratingA = Number(productA.rating)
+        const ratingB = Number(productB.rating)
+        const priceA = Number(productA.price)
+        const priceB = Number(productB.price)
+
+        switch (sortOption) {
+            case '1':
+                return ratingA - ratingB
+            case '2':
+                return ratingB - ratingA
+            case '3':
+                return Number(productB.id) - Number(productA.id)
+            case '4':
+                return priceA - priceB
+            case '5':
+                return priceB - priceA
+            default:
+                return Number(Boolean(productB.isBestSeller)) - Number(Boolean(productA.isBestSeller))
+                    || ratingB - ratingA
+        }
+    })
     
     const onSearch = (event) => {
         setSearchItem(event.target.value)
+    }
+
+    const onSortChange = (event) => {
+        setSortOption(event.target.value)
     }
 
     return (
         <>
             <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
                 <button className="rounded-lg border border-[#b8d9f5] px-4 py-2 text-sm font-semibold text-[#0b4c8d]">☷ Filters</button>
-                <button className="rounded-lg border border-[#b8d9f5] px-4 py-2 text-sm font-semibold text-[#0b4c8d]">Sort: Popular</button>
+                <select aria-label="Sort products" value={sortOption} onChange={onSortChange} className="rounded-lg border border-[#b8d9f5] bg-white px-3 py-2 text-sm font-semibold text-[#0b4c8d]">
+                    <option value="0">Sort: Popular</option>
+                    <option value="1">Rating: Low to High</option>
+                    <option value="2">Rating: High to Low</option>
+                    <option value="3">Newest</option>
+                    <option value="4">Price: Low to High</option>
+                    <option value="5">Price: High to Low</option>
+                </select>
             </div>
 
             <div className="grid grid-cols-1 gap-5 lg:grid-cols-[205px_1fr] xl:grid-cols-[225px_1fr] py-10">
@@ -65,19 +100,21 @@ const Products = () => {
                         </div>
                         <div className="flex items-center gap-2 text-xs text-[#0b315c]">
                             <span>Sort by:</span>
-                            <select className="h-9 w-32 rounded-lg border border-[#c4def5] bg-white px-3 font-semibold outline-none">
-                                <option>Popular</option>
-                                <option>Newest</option>
-                                <option>Price: Low</option>
-                                <option>Price: High</option>
+                            <select aria-label="Sort products" value={sortOption} onChange={onSortChange} className="h-9 w-32 rounded-lg border border-[#c4def5] bg-white px-3 font-semibold outline-none">
+                                <option value="0">Popular</option>
+                                <option value="1">Rating: Low to High</option>
+                                <option value="2">Rating: High to Low</option>
+                                <option value="3">Newest</option>
+                                <option value="4">Price: Low to High</option>
+                                <option value="5">Price: High to Low</option>
                             </select>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4">
-                        {filteredProducts.map((eachProduct) => <ProductCard products={eachProduct} key={eachProduct.id} />)}
+                        {sortedProducts.map((eachProduct) => <ProductCard products={eachProduct} key={eachProduct.id} />)}
                     </div>
-                    {filteredProducts.length === 0 && (
+                    {sortedProducts.length === 0 && (
                         <p className="py-12 text-center text-sm text-slate-500">
                             No products found. Try changing your search or filters.
                         </p>

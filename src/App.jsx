@@ -19,6 +19,7 @@ import AdminCustomers from './components/admin/AdminCustomers'
 import AdminOrders from './components/admin/AdminOrders'
 import AddProduct from './components/admin/AddProduct'  
 import AdminProfile from './components/admin/AdminProfile'
+import Wishlist from './components/wishlist/Wishlist'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: "/products", Component: Products },
       { path: "/product/:productId", Component: ProductDetails },
+      { path: "/wishlist", Component: Wishlist },
       { path: "/about", Component: About },
       { path: "/contact", Component: ContactUs },
       { path: "/login", Component: SignIn },

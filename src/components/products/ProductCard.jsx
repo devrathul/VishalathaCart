@@ -1,30 +1,57 @@
 import { Link } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
+import { FaHeart } from "react-icons/fa6"
+import { removeFromWishList, toggleWishlist } from "../../features/wishlist/wishlistSlice"
 import Rating from "../common/Rating"
 
-const ProductCard = (props) => {
+const productImages = import.meta.glob('../../assets/images/**/*', {
+    eager: true,
+    query: '?url',
+    import: 'default',
+})
 
-    const { products } = props
-    const imageUrl = products.image?.startsWith('/') ? products.image : `../../src/assets/images/${products.image}`
+const ProductCard = ({ products, showRemoveAction = false }) => {
+    const dispatch = useDispatch()
+    const wishlistIds = useSelector(state => state.wishlists.value)
+    const isWishlisted = wishlistIds.includes(products.id)
+    const imageUrl = products.image?.startsWith('/')
+        ? products.image
+        : productImages[`../../assets/images/${products.image}`]
+
+    const handleWishlistClick = () => {
+        dispatch(toggleWishlist(products.id))
+    }
+
     return (
         <div className="w-full rounded-2xl border border-blue-100 bg-white p-3 shadow-sm">
-            <Link to={`/product/${products.id}`} className="flex flex-col items-center justify-center gap-3">
-                <div className="flex flex-col h-75 items-center justify-center rounded-xl bg-gradient-to-b from-white to-slate-50 w-full">
-                    <div className="flex justify-between w-full px-2">
+            <div className="relative flex flex-col items-center justify-center gap-3">
+                <div className="flex h-75 w-full flex-col items-center justify-center rounded-xl bg-gradient-to-b from-white to-slate-50">
+                    <div className="flex w-full justify-between px-2">
                         <span className="rounded-full bg-gradient-to-r from-red-500 to-pink-500 px-4 py-1.5 text-sm font-bold text-white">
                             {products.discount}% OFF
                         </span>
-                        <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-2xl text-[#092b62] shadow-sm"> ♡ </button>
+                        <button
+                            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                            aria-pressed={isWishlisted}
+                            className={`flex h-9 w-9 items-center justify-center rounded-full bg-white text-xl shadow-sm ${isWishlisted ? 'text-rose-500' : 'text-[#092b62]'}`}
+                            onClick={handleWishlistClick}
+                            type="button"
+                        >
+                            <FaHeart />
+                        </button>
                     </div>
-                    <img
-                        src={imageUrl}
-                        alt="iPhone 15 Pro"
-                        className="h-45 w-45 object-contain"
-                    />
-                    <h3 className="text-lg font-bold text-[#092b62]">
-                        {products.name}
-                    </h3>
+                    <Link to={`/product/${products.id}`} className="flex flex-col items-center gap-3">
+                        <img
+                            src={imageUrl}
+                            alt={products.name}
+                            className="h-45 w-45 object-contain"
+                        />
+                        <h3 className="text-lg font-bold text-[#092b62]">
+                            {products.name}
+                        </h3>
+                    </Link>
                 </div>
-            </Link>
+            </div>
             <div className="px-2 pt-3">
                 <div className="flex items-center gap-2">
                     <Rating rating={products.rating} />
@@ -42,10 +69,20 @@ const ProductCard = (props) => {
                 </div>
                 <button
                     className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-base font-semibold text-white transition hover:from-blue-700 hover:to-blue-600"
+                    type="button"
                 >
                     <span className="text-xl">🛒</span>
                     Add to Cart
                 </button>
+                {showRemoveAction && (
+                    <button
+                        className="mt-2 w-full rounded-lg border border-rose-200 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                        onClick={() => dispatch(removeFromWishList(products.id))}
+                        type="button"
+                    >
+                        Remove from wishlist
+                    </button>
+                )}
             </div>
         </div>
     )

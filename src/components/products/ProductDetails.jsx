@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleWishlist } from '../../features/wishlist/wishlistSlice'
 import {
     FaCartShopping,
     FaChevronRight,
@@ -48,12 +49,18 @@ const getImageUrl = (imageName) => imageName?.startsWith('/')
     : productImages[`../../assets/images/${imageName}`]
 
 const ProductDetailsContent = ({ product, products }) => {
+    const dispatch = useDispatch()
+    const wishlistIds = useSelector(state => state.wishlists.value)
     const [activeTab, setActiveTab] = useState('Description')
     const [quantity, setQuantity] = useState(1)
     const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || '')
     const [selectedVariant, setSelectedVariant] = useState(product?.storage?.[0] || product?.sizes?.[0] || '')
     const [selectedImage, setSelectedImage] = useState(product?.image || '')
-    const [isWishlisted, setIsWishlisted] = useState(false)
+    const isWishlisted = wishlistIds.includes(product.id)
+
+    const handleWishlistClick = () => {
+        dispatch(toggleWishlist(product.id))
+    }
 
     const availableImages = product.images?.length ? product.images : [product.image]
     const imageUrl = getImageUrl(selectedImage)
@@ -90,7 +97,7 @@ const ProductDetailsContent = ({ product, products }) => {
                             aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
                             aria-pressed={isWishlisted}
                             className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-blue-100 bg-white text-xl text-[#123e70]"
-                            onClick={() => setIsWishlisted(value => !value)}
+                            onClick={handleWishlistClick}
                             type="button"
                         >
                             <FaHeart className={isWishlisted ? 'text-rose-500' : ''} />
@@ -182,7 +189,7 @@ const ProductDetailsContent = ({ product, products }) => {
                         </button>
                         <button
                             className={`flex h-12 items-center justify-center gap-2 rounded-lg border font-semibold transition ${isWishlisted ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-blue-500 text-blue-600 hover:bg-blue-50'}`}
-                            onClick={() => setIsWishlisted(value => !value)}
+                            onClick={handleWishlistClick}
                             type="button"
                         >
                             <FaHeart /> {isWishlisted ? 'Added to Wishlist' : 'Add to Wishlist'}
