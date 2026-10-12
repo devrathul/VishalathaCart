@@ -1,8 +1,11 @@
 import ProductCard from './ProductCard'
 import ProductFilters from './ProductFilters'
 import { useSelector } from 'react-redux'
+import {useState} from 'react'
 
 const Products = () => {
+
+    const [searchItem,setSearchItem] = useState('')
     const productList = useSelector(state => state.productList.value)
     const selectedCategories = useSelector(state => state.productList.selectedCategories)
     const selectedPriceRange = useSelector(state => state.productList.selectedPriceRange)
@@ -10,7 +13,17 @@ const Products = () => {
     const selectedRating = useSelector(state => state.productList.selectedRating)
     const selectedColors = useSelector(state => state.productList.selectedColors)
 
+    const searchTerm = searchItem.trim().toLowerCase()
+
     const filteredProducts = productList.filter((product) => {
+        const matchesSearch = !searchTerm || [
+            product.name,
+            product.brand,
+            product.category,
+            product.subcategory,
+            product.sku,
+            product.description
+        ].some(value => String(value ?? '').toLowerCase().includes(searchTerm))
 
         const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category)
 
@@ -26,8 +39,13 @@ const Products = () => {
         const matchesColor = selectedColors.length === 0
             || selectedColors.some(color => productColors.includes(color))
 
-        return matchesCategory && matchesPrice && matchesBrand && matchesRating && matchesColor
+        return matchesSearch && matchesCategory && matchesPrice && matchesBrand && matchesRating && matchesColor
     })
+    
+    const onSearch = (event) => {
+        setSearchItem(event.target.value)
+    }
+
     return (
         <>
             <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
@@ -35,7 +53,7 @@ const Products = () => {
                 <button className="rounded-lg border border-[#b8d9f5] px-4 py-2 text-sm font-semibold text-[#0b4c8d]">Sort: Popular</button>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[205px_1fr] xl:grid-cols-[225px_1fr] my-10">
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[205px_1fr] xl:grid-cols-[225px_1fr] py-10">
 
                 <ProductFilters />
 
@@ -43,7 +61,7 @@ const Products = () => {
                     <div className="mb-6 hidden items-center gap-4 lg:flex">
                         <div className="flex h-9 flex-1 items-center rounded-full border border-[#c4def5] px-3.5">
                             <span className="mr-2 text-xl text-[#003f88]">⌕</span>
-                            <input className="w-full text-xs outline-none" placeholder="Search products..." />
+                            <input value={searchItem} onChange={onSearch} className="w-full text-xs outline-none" placeholder="Search products..." />
                         </div>
                         <div className="flex items-center gap-2 text-xs text-[#0b315c]">
                             <span>Sort by:</span>
@@ -59,6 +77,11 @@ const Products = () => {
                     <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4">
                         {filteredProducts.map((eachProduct) => <ProductCard products={eachProduct} key={eachProduct.id} />)}
                     </div>
+                    {filteredProducts.length === 0 && (
+                        <p className="py-12 text-center text-sm text-slate-500">
+                            No products found. Try changing your search or filters.
+                        </p>
+                    )}
                 </section>
             </div>
         </>
