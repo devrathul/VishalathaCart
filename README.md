@@ -151,23 +151,6 @@ Suggested screenshots:
 5. Admin product management page
 ![adminproduct](image-7.png)
 ![addproduct](image-9.png)
-Example Markdown for displaying screenshots:
-
-```markdown
-### Home Page
-
-![Vishalatha Cart Home Page](screenshots/home-page.png)
-
-### Product Listing
-
-![Product Listing](screenshots/product-listing.png)
-
-### Admin Dashboard
-
-![Admin Dashboard](screenshots/admin-dashboard.png)
-```
-
-Replace these example image paths with your actual screenshot filenames.
 
 ## 🎨 Design Choices
 
