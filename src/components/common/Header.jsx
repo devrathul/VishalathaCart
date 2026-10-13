@@ -55,13 +55,7 @@ const Header = () => {
                 <div className='flex justify-between items-center px-5 gap-5'>
                     <div className='lg:w-1/5 flex-none'>
                         <Link to="/"><img src={logo} title="Vishalatha Cart | Shopping Assistant" alt="Vishalatha Cart | Shopping Assistant" /></Link>
-                    </div>
-                    <div className='lg:w-3/5 shrink items-center text-center hidden md:block'>
-                        <div className='flex border border-gray-400 outline-gray-400 rounded-full px-3 py-1 max-w-150 mx-auto'>
-                            <input type="search" className='w-full outline-0' placeholder='Search for products, brands and more...' />
-                            <AiOutlineSearch size={25} />
-                        </div>
-                    </div>
+                    </div>                    
                     <div className='lg:w-1/5 flex-none'>
                         <ul className='hidden md:flex gap-6 font-semibold justify-center items-center text-[#031d44]'>
                             <li>

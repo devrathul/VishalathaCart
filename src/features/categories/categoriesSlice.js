@@ -4,50 +4,51 @@ const categoriesList = [
     {
         "id": 1,
         "categoryName": "Electronics",
+        "image": "electronic.png",
         "description": "Phones, computers, and electronic accessories",
         "status": "Active"
     },
     {
         "id": 2,
         "categoryName": "Fashion",
+        "image": "fashion.png",
         "description": "Clothing, footwear, and accessories",
         "status": "Active"
     },
     {
         "id": 3,
         "categoryName": "Home & Living",
+        "image": "home.png",
         "description": "Home decor, furniture, and household essentials",
         "status": "Active"
     },
     {
         "id": 4,
         "categoryName": "Beauty & Health",
+        "image": "homeandliviing.png",
         "description": "Skincare, cosmetics, and personal care products",
         "status": "Active"
     },
     {
         "id": 5,
         "categoryName": "Sports & Outdoors",
+        "image": "sports.png",
         "description": "Sports equipment and outdoor gear",
         "status": "Active"
     },
     {
         "id": 6,
         "categoryName": "Toys & Games",
+        "image": "toyandgame.png",
         "description": "Toys, puzzles, and family games",
         "status": "Active"
     },
     {
         "id": 7,
         "categoryName": "Groceries",
+        "image": "groceries.png",
         "description": "Everyday food and grocery essentials",
         "status": "Active"
-    },
-    {
-        "id": 8,
-        "categoryName": "Books",
-        "description": "Books, stationery, and learning materials",
-        "status": "InActive"
     }
 ]
 

@@ -24,13 +24,23 @@ const Home = () => {
         slidesToScroll: 1,
         responsive: [
             {
+                breakpoint: 1350,
+                settings: {
+                    slidesToShow: 4
+                }
+            },
+            {
                 breakpoint: 1024,
                 settings: {
                     slidesToShow: 2
                 }
-            },
-            {
-                breakpoint: 464,
+            },{
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2
+                }
+            },{
+                breakpoint: 564,
                 settings: {
                     slidesToShow: 1
                 }
@@ -46,7 +56,7 @@ const Home = () => {
                 </Slider>
             </div>
             <h2 className='font-bold mt-8 mb-4 text-lg'>Shop By Product</h2>
-            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {productList.map(eachProduct => {
                     if (eachProduct.isFeatured === true) {
                         return (<ProductCard products={eachProduct} key={eachProduct.id} />)

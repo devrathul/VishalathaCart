@@ -4,6 +4,7 @@ import { FaSquareInstagram } from "react-icons/fa6";
 import { SlSocialTwitter } from "react-icons/sl";
 import { AiOutlineYoutube } from "react-icons/ai";
 import { CiLinkedin } from "react-icons/ci";
+import { Link } from 'react-router';
 
 
 const Footer = () => {
@@ -22,11 +23,10 @@ const Footer = () => {
                         <div>
                             <h3 className='font-semibold text-lg mb-2'>Quick Links</h3>
                             <ul className='leading-relaxed'>
-                                <li>Home</li>
-                                <li>Shop</li>
-                                <li>Deal</li>
-                                <li>About</li>
-                                <li>Cart</li>
+                                <li><Link to="/">Home</Link></li>
+                                <li><Link to="/products">Shop</Link></li>
+                                <li><Link to="/cart">Cart</Link></li>
+                                <li><Link to="/wishlist">Wishlist</Link></li>
                             </ul>
                         </div>
                         <div>
@@ -36,7 +36,6 @@ const Footer = () => {
                                 <li>Contact Us</li>
                                 <li>Privacy Policy</li>
                                 <li>About</li>
-                                <li>Cart</li>
                             </ul>
                         </div>
                         <div>
