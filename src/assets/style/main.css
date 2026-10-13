@@ -23,3 +23,8 @@ body {
 input[type="range"] {
   accent-color: #087ff5;
 }
+
+.home-category-slider .slick-prev::before,
+.home-category-slider .slick-next::before {
+  color: #0b4c8d;
+}

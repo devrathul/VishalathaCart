@@ -1,39 +1,14 @@
 import electronicImg from '../../assets/images/electronic.png'
 
-const CategoryCard = () => {
+const CategoryCard = (props) => {
+    const { category } = props
     return (
-        <>
-        <div className='grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] mb-8 gap-10'>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Electronic</h3>
-            </div>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Fashion</h3>
-            </div>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Home & Living</h3>
-            </div>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Beauty & Health</h3>
-            </div>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Sports & Outdoors</h3>
-            </div>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Toy & Games</h3>
-            </div>
-            <div className="card p-4 rounded-2xl shadow-2xl">
-                <img src={electronicImg} alt="category" title="category" />
-                <h3 className="font-semibold text-md text-center mt-2">Groceries</h3>
+        <div className='p-4'>
+            <div className="card rounded-2xl border border-blue-100 bg-white p-3 shadow-sm">
+                <img src={electronicImg} alt={category.categoryName} title={category.categoryName} />
+                <h3 className="font-semibold text-md text-center mt-2">{category.categoryName}</h3>
             </div>
         </div>
-        </>
     )
 }
 

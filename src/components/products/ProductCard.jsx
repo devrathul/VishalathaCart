@@ -2,6 +2,7 @@ import { Link } from "react-router"
 import { useDispatch, useSelector } from "react-redux"
 import { FaHeart } from "react-icons/fa6"
 import { removeFromWishList, toggleWishlist } from "../../features/wishlist/wishlistSlice"
+import { addToCart } from "../../features/cart/cartSlice"
 import Rating from "../common/Rating"
 
 const productImages = import.meta.glob('../../assets/images/**/*', {
@@ -20,6 +21,10 @@ const ProductCard = ({ products, showRemoveAction = false }) => {
 
     const handleWishlistClick = () => {
         dispatch(toggleWishlist(products.id))
+    }
+
+    const handleAddToCart = () => {
+        dispatch(addToCart(products))
     }
 
     return (
@@ -68,7 +73,9 @@ const ProductCard = ({ products, showRemoveAction = false }) => {
                     </span>
                 </div>
                 <button
-                    className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-base font-semibold text-white transition hover:from-blue-700 hover:to-blue-600"
+                    className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-lg cursor-pointer bg-gradient-to-r from-blue-600 to-blue-500 text-base font-semibold text-white transition hover:from-blue-700 hover:to-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={products.stock <= 0}
+                    onClick={handleAddToCart}
                     type="button"
                 >
                     <span className="text-xl">🛒</span>
@@ -76,7 +83,7 @@ const ProductCard = ({ products, showRemoveAction = false }) => {
                 </button>
                 {showRemoveAction && (
                     <button
-                        className="mt-2 w-full rounded-lg border border-rose-200 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                        className="mt-2 w-full rounded-lg border border-rose-200 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 cusror-pointer"
                         onClick={() => dispatch(removeFromWishList(products.id))}
                         type="button"
                     >

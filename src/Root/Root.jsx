@@ -7,7 +7,7 @@ export default function Root() {
         <>
             <Header />
             <main className='min-h-screen bg-[#eef8ff]'>
-                <div className="max-w-[1650px] mx-auto px-8">
+                <div className="max-w-[1650px] mx-auto px-8 py-5">
                     <Outlet />
                 </div>
             </main>

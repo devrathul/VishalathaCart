@@ -455,7 +455,7 @@ export const productsSlice = createSlice({
     }
 })
 
-export const { addToCart, toggleCategory, togglePrice, toggleBrand, toggleRating, toggleColor,
+export const { toggleCategory, togglePrice, toggleBrand, toggleRating, toggleColor,
     clearFilters, addProduct, deleteProduct, updateProduct } = productsSlice.actions
 
 export default productsSlice.reducer
