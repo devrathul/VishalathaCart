@@ -12,6 +12,7 @@ const SignIn = () => {
     const [isUsers, setIsUsers] = useState(false)
     const [mobileOrEmail, setmobileOrEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [errorMsg, setErrorMsg] = useState('')
 
     const isLoggedIn = Cookies.get('loginProfile') ? true : false
 
@@ -57,7 +58,9 @@ const SignIn = () => {
             } else {
                 navigate('/')
             }
-            
+            setErrorMsg("")
+        }else{
+            setErrorMsg("User Name and Password Doesn't Match")
         }
     }
 
@@ -117,6 +120,7 @@ const SignIn = () => {
                                             <input onChange={onCheckPassword} type="password" id="txtPassword" placeholder="Enter password"
                                                 className="h-10.75 flex-1 border border-[#d7e4f1] rounded-md px-4 py-3 text-[14px] text-[#456789] outline-none focus:border-[#087BFF] focus:ring-2 focus:ring-[#087BFF]/10" />
                                         </>)}
+                                        <p className='text-red-600 text-sm'>{errorMsg}</p>
                                         <button type="button" onClick={isUsers ? onLogin : onIsUsers} className="mt-3 w-full h-10.75 bg-[#087BFF] hover:bg-[#006ee8] text-white text-[14px] font-semibold rounded-md transition duration-200 cursor-pointer">
                                             {isUsers ? 'Login' : 'Continue'}
                                         </button>
