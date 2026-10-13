@@ -1,12 +1,14 @@
 import { useSelector, useDispatch } from "react-redux"
 import { removeFromCart, removeAllFromCart } from '../../features/cart/cartSlice'
 import { Link } from 'react-router'
+import Cookies from 'js-cookie'
 
 const ViewCart = () => {
 
     const dispatch = useDispatch()
     const viewcartItems = useSelector((state) => state.carts.value)
-    console.log(viewcartItems)
+    const isLoggedIn = Cookies.get('loginProfile') ? true : false
+
     const renderCartList = () => (
         <>
             <div className="flex items-center justify-between gap-3 p-4 border-b border-blue-100">
@@ -69,13 +71,24 @@ const ViewCart = () => {
     )
 
     return (
-        <>
+        <section className="py-10">
+            <h1 className="mb-6 text-2xl font-bold text-[#092f5d]">My Cart</h1>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 items-start">
-                <section className="lg:col-span-2 border border-blue-100 rounded-xl overflow-hidden bg-white">
-                    {viewcartItems.length === 0 ? renderEmptyCart() : renderCartList()}
-                </section>
+                {isLoggedIn ? (
+                    <div className="lg:col-span-2 border border-blue-100 rounded-xl overflow-hidden bg-white">
+                        {viewcartItems.length === 0 ? renderEmptyCart() : renderCartList()}
+                    </div>
+                ) : (
+                    <div className="rounded-xl border border-blue-100 bg-white py-12 text-center">
+                        <p className=' text-lg text-slate-500 my-5'>Your cart is empty</p>
+                        <div className='flex gap-5 justify-center'>
+                            <Link className='rounded-full bg-[#0b2648] text-white px-5 py-2 text-sm' to="/login">Sign In Now</Link>
+                            <Link className='rounded-full bg-[#0b2648] text-white px-5 py-2 text-sm' to="/signup">Sign Up Now</Link>
+                        </div>
+                    </div>
+                )}
             </div>
-        </>
+        </section>
     )
 }
 
