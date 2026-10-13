@@ -134,16 +134,23 @@ The responsive layout helps users navigate product listings, view product detail
 
 ## 📸 Screenshots
 
-Add screenshots of your application to a `screenshots` folder in the project root.
 
 Suggested screenshots:
 
 1. Home page
+![homedesktop](image.png)
+![homemobile](image-1.png)
 2. Product listing and product details
+![productlist](image-2.png)
+![productdetails](image-3.png)
 3. Wishlist and shopping cart
+![cart](image-4.png)
+![wishlist](image-5.png)
 4. Admin dashboard
+![admindashboard](image-8.png)
 5. Admin product management page
-
+![adminproduct](image-7.png)
+![addproduct](image-9.png)
 Example Markdown for displaying screenshots:
 
 ```markdown
