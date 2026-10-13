@@ -1,9 +1,11 @@
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useDispatch, useSelector } from "react-redux"
 import { FaHeart } from "react-icons/fa6"
 import { removeFromWishList, toggleWishlist } from "../../features/wishlist/wishlistSlice"
 import { addToCart } from "../../features/cart/cartSlice"
 import Rating from "../common/Rating"
+import Cookies from 'js-cookie'
+
 
 const productImages = import.meta.glob('../../assets/images/**/*', {
     eager: true,
@@ -13,18 +15,30 @@ const productImages = import.meta.glob('../../assets/images/**/*', {
 
 const ProductCard = ({ products, showRemoveAction = false }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const wishlistIds = useSelector(state => state.wishlists.value)
     const isWishlisted = wishlistIds.includes(products.id)
     const imageUrl = products.image?.startsWith('/')
         ? products.image
         : productImages[`../../assets/images/${products.image}`]
 
+    const isLoggedIn = Cookies.get('loginProfile') ? true : false
+
+
     const handleWishlistClick = () => {
-        dispatch(toggleWishlist(products.id))
+        if (isLoggedIn) {
+            dispatch(toggleWishlist(products.id))
+        } else {
+            navigate('/login')
+        }
     }
 
     const handleAddToCart = () => {
-        dispatch(addToCart(products))
+        if (isLoggedIn) {
+            dispatch(addToCart(products))
+        } else {
+            navigate('/login')
+        }
     }
 
     return (

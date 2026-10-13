@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useParams, useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleWishlist } from '../../features/wishlist/wishlistSlice'
+import { addToCart } from "../../features/cart/cartSlice"
+import Cookies from 'js-cookie'
+
 import {
     FaCartShopping,
     FaChevronRight,
@@ -50,6 +53,8 @@ const getImageUrl = (imageName) => imageName?.startsWith('/')
 
 const ProductDetailsContent = ({ product, products }) => {
     const dispatch = useDispatch()
+    const isLoggedIn = Cookies.get('loginProfile') ? true : false
+    const navigate = useNavigate()
     const wishlistIds = useSelector(state => state.wishlists.value)
     const [activeTab, setActiveTab] = useState('Description')
     const [quantity, setQuantity] = useState(1)
@@ -59,15 +64,27 @@ const ProductDetailsContent = ({ product, products }) => {
     const isWishlisted = wishlistIds.includes(product.id)
 
     const handleWishlistClick = () => {
-        dispatch(toggleWishlist(product.id))
+        if (isLoggedIn) {
+            dispatch(toggleWishlist(product.id))
+        } else {
+            navigate('/login')
+        }
+    }
+
+    const handleAddToCart = (product) => {
+        if (isLoggedIn) {
+            dispatch(addToCart(product))
+        } else {
+            navigate('/login')
+        }
     }
 
     const availableImages = product.images?.length ? product.images : [product.image]
     const imageUrl = getImageUrl(selectedImage)
     const variants = product.storage?.length ? product.storage : product.sizes || []
     const variantLabel = product.storage?.length ? 'Storage' : 'Size'
-   
-    
+
+
     const specifications = Object.entries(product.specifications || {})
 
     return (
@@ -184,7 +201,8 @@ const ProductDetailsContent = ({ product, products }) => {
                     </div>
 
                     <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                        <button className="flex h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400" disabled={product.stock <= 0} type="button">
+                        <button className="flex h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400" disabled={product.stock <= 0} type="button"
+                            onClick={handleAddToCart}>
                             <FaCartShopping /> Add to Cart
                         </button>
                         <button

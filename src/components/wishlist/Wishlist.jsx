@@ -37,8 +37,6 @@ const Wishlist = () => {
                     </div>
                 </div>
             )}
-
-
         </section>
     )
 }
