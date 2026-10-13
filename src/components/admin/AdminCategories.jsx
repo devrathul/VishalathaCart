@@ -9,18 +9,18 @@ const AdminCategories = () => {
     const dispatch = useDispatch()
 
     return (
-        <div classNameName="flex min-w-0 flex-1 flex-col">
-            <main classNameName="main-bg main-content flex-1 p-5 md:p-6">
-                <section classNameName="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div classname="flex min-w-0 flex-1 flex-col">
+            <main classname="main-bg main-content flex-1 p-5 md:p-6">
+                <section classname="mb-5 flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 classNameName="page-title text-[29px] font-bold tracking-tight text-[#0b2856]">Categories</h2>
-                        <p classNameName="mt-1 text-[14px] text-[#527bb9]">
+                        <h2 classname="page-title text-[29px] font-bold tracking-tight text-[#0b2856]">Categories</h2>
+                        <p classname="mt-1 text-[14px] text-[#527bb9]">
                             Manage your store categories. Add, edit, or remove categories from your catalog.
                         </p>
                     </div>
 
-                    <button id="addProductBtn" classNameName="flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-[13px] font-medium text-white shadow-sm transition hover:bg-blue-700">
-                        <FiPlus classNameName="h-5 w-5" />
+                    <button id="addProductBtn" classname="flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-[13px] font-medium text-white shadow-sm transition hover:bg-blue-700">
+                        <FiPlus classname="h-5 w-5" />
                         Add Category
                     </button>
                 </section>
@@ -108,7 +108,7 @@ const AdminCategories = () => {
                                         </td>
 
                                         <td className="px-4 py-4">
-                                            <span classNameName={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${categor.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                            <span classname={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${categor.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                                 {categor.status}
                                             </span>
                                         </td>
