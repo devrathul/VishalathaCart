@@ -271,7 +271,7 @@ const ProductForm = ({ productId, productToEdit, productList, categoryList }) =>
     }
 
     return (
-        <main className="w-full p-3 sm:p-5">
+        <>
             <header className="mb-5">
                 <h1 className="text-2xl font-bold tracking-tight text-[#123763] sm:text-[30px]">
                     {productToEdit ? 'Update Product' : 'Add Product'}
@@ -547,7 +547,7 @@ const ProductForm = ({ productId, productToEdit, productList, categoryList }) =>
 
 
             </form>
-        </main>
+        </>
     )
 }
 

@@ -24,7 +24,9 @@ export default function AdminRoot() {
         <>
             <div className="flex min-h-screen">
                 <AdminHeader />
-                <Outlet />
+                <main className="w-full p-3 sm:p-5">
+                    <Outlet />
+                </main>
             </div>
         </>
     )

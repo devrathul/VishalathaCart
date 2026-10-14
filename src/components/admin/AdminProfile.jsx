@@ -1,7 +1,7 @@
 import {Link} from 'react-router'
 
 const AdminProfile = () => (
-    <main className="w-full p-3 sm:p-5">
+    <>
         <div className="flex flex-col sm:flex-row sm:items-center
                     sm:justify-between gap-4 mb-8">
 
@@ -271,7 +271,7 @@ const AdminProfile = () => (
             </div>
 
         </section>
-    </main>
+    </>
 )
 
 export default AdminProfile
