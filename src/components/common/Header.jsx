@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router'
-import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { FaCartShopping, FaHeart, FaRegCircleUser } from "react-icons/fa6";
 import logo from '/images/logo.png'
 import { useSelector, useDispatch } from 'react-redux'

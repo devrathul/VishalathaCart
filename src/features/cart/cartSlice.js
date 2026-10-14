@@ -7,25 +7,45 @@ export const cartSlice = createSlice({
     },
     reducers: {
         addToCart: (state, action) => {
-            const product = action.payload
-            const quantity = product.quantity ?? 1
-            const cartItem = state.value.find(item => item.id === product.id)
+            const cartItemInput = action.payload?.cartItems ?? action.payload
+            if (!cartItemInput) return
 
-            if (cartItem) {
-                cartItem.quantity += quantity
+            const productID = cartItemInput.productID ?? cartItemInput.id
+            const quantity = Number(cartItemInput.quantity) > 0 ? Number(cartItemInput.quantity) : 1
+            const existingItem = state.value.find(item => item.productID === productID)
+
+            if (existingItem) {
+                existingItem.quantity += quantity
             } else {
-                state.value.push({ ...product, quantity })
+                state.value.push({
+                    ...cartItemInput,
+                    productID,
+                    quantity,
+                })
             }
         },
         removeFromCart: (state, action) => {
-            state.value = state.value.filter(product => product.id !== action.payload)
+            const productIdToRemove = action.payload
+            state.value = state.value.filter(cartItems => cartItems.productID !== productIdToRemove && cartItems.id !== productIdToRemove)
         },
         removeAllFromCart: state => {
             state.value = []
+        },
+        addQuantity: (state, action) => {
+            const cartItem = state.value.find(item => item.cartID === action.payload)
+            if (cartItem) {
+                cartItem.quantity = (cartItem.quantity ?? 1) + 1
+            }
+        },
+        minusQuantity: (state, action) => {
+            const cartItem = state.value.find(item => item.cartID === action.payload)
+            if (cartItem && cartItem.quantity > 1) {
+                cartItem.quantity -= 1
+            }
         }
     }
 })
 
-export const { addToCart, removeFromCart, removeAllFromCart } = cartSlice.actions
+export const { addToCart, removeFromCart, removeAllFromCart, addQuantity, minusQuantity } = cartSlice.actions
 
 export default cartSlice.reducer

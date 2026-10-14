@@ -5,6 +5,8 @@ import { removeFromWishList, toggleWishlist } from "../../features/wishlist/wish
 import { addToCart } from "../../features/cart/cartSlice"
 import Rating from "../common/Rating"
 import Cookies from 'js-cookie'
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 const productImages = import.meta.glob('../../assets/images/**/*', {
@@ -17,6 +19,8 @@ const ProductCard = ({ products, showRemoveAction = false }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const wishlistIds = useSelector(state => state.wishlists.value)
+    const user = useSelector(state => state.auth.user)
+
     const isWishlisted = wishlistIds.includes(products.id)
     const imageUrl = products.image?.startsWith('/')
         ? products.image
@@ -34,11 +38,21 @@ const ProductCard = ({ products, showRemoveAction = false }) => {
     }
 
     const handleAddToCart = () => {
-        if (isLoggedIn) {
-            dispatch(addToCart(products))
-        } else {
+        if (!isLoggedIn) {
             navigate('/login')
+            return
         }
+
+        const addToCartVal = {
+            cartItems: {
+                cartID: uuidv4(),
+                customerID: user?.id ?? null,
+                productID: products.id,
+                quantity: 1,
+            }
+        }
+
+        dispatch(addToCart(addToCartVal))
     }
 
     return (

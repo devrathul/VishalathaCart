@@ -56,6 +56,7 @@ const ProductDetailsContent = ({ product, products }) => {
     const isLoggedIn = Cookies.get('loginProfile') ? true : false
     const navigate = useNavigate()
     const wishlistIds = useSelector(state => state.wishlists.value)
+    const user = useSelector(state => state.auth.user)
     const [activeTab, setActiveTab] = useState('Description')
     const [quantity, setQuantity] = useState(1)
     const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || '')
@@ -71,12 +72,20 @@ const ProductDetailsContent = ({ product, products }) => {
         }
     }
 
-    const handleAddToCart = (product) => {
-        if (isLoggedIn) {
-            dispatch(addToCart(product))
-        } else {
+    const handleAddToCart = () => {
+        if (!isLoggedIn) {
             navigate('/login')
+            return
         }
+
+        dispatch(addToCart({
+            cartItems: {
+                cartID: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+                customerID: user?.id ?? null,
+                productID: product.id,
+                quantity,
+            }
+        }))
     }
 
     const availableImages = product.images?.length ? product.images : [product.image]
