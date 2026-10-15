@@ -2,6 +2,8 @@ import ProductCard from './ProductCard'
 import ProductFilters from './ProductFilters'
 import { useSelector } from 'react-redux'
 import {useState} from 'react'
+import { LiaSearchSolid } from "react-icons/lia";
+
 
 const Products = () => {
 
@@ -95,7 +97,7 @@ const Products = () => {
                 <section className="min-w-0">
                     <div className="mb-6 hidden items-center gap-4 lg:flex">
                         <div className="flex h-9 flex-1 items-center rounded-full border border-[#c4def5] px-3.5">
-                            <span className="mr-2 text-xl text-[#003f88]">⌕</span>
+                            <LiaSearchSolid className="mr-2 text-xl text-[#003f88]" />
                             <input value={searchItem} onChange={onSearch} className="w-full text-xs outline-none" placeholder="Search products..." />
                         </div>
                         <div className="flex items-center gap-2 text-xs text-[#0b315c]">

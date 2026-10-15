@@ -33,9 +33,11 @@ const AdminOrders = () => {
 
     const filteredOrders = orders.filter((order) => {
         const customer = users.find((user) => user.id === order.customerId)
+
         const customerName = customer
             ? `${customer.firstName} ${customer.lastName}`
             : order.customerId
+
         const searchValue = searchTerm.trim().toLowerCase()
         const matchesSearch = [
             order.id,
@@ -43,6 +45,7 @@ const AdminOrders = () => {
             customerName,
             customer?.email,
         ].some((value) => value?.toLowerCase().includes(searchValue))
+        
         const matchesPaymentStatus = !paymentStatusFilter
             || order.paymentStatus === paymentStatusFilter
         const matchesDeliveryStatus = !deliveryStatusFilter

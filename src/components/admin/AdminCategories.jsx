@@ -1,6 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { FiPlus } from "react-icons/fi";
-import { removeCategory } from '../../features/categories/categoriesSlice'
+import { FiEdit } from "react-icons/fi";
+import { MdOutlineDelete } from "react-icons/md";
+import { removeCategory, editCategory } from '../../features/categories/categoriesSlice'
+import { IoMdSearch } from "react-icons/io";
 
 
 const AdminCategories = () => {
@@ -31,13 +34,7 @@ const AdminCategories = () => {
                         md:grid-cols-12">
 
                     <div className="relative md:col-span-8">
-                        <svg className="absolute left-4 top-1/2 h-5 w-5
-                               -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-
-                            <circle cx="11" cy="11" r="7" stroke-width="1.8"></circle>
-                            <path d="m16 16 4 4" stroke-width="1.8" stroke-linecap="round"></path>
-                        </svg>
-
+                        <IoMdSearch className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                         <input id="searchInput" type="text" placeholder="Search categories by name..."
                             oninput="filterCategories()" className="h-12 w-full rounded-lg border
                                border-blue-100 bg-white pl-12 pr-4
@@ -61,7 +58,7 @@ const AdminCategories = () => {
                 </div>
 
                 <div className="w-full overflow-x-auto">
-                    <table className="w-full min-w-[760px] border-collapse
+                    <table className="w-full min-w-190 border-collapse
                               text-left text-sm">
 
                         <thead>
@@ -114,20 +111,14 @@ const AdminCategories = () => {
 
                                     <td className="px-4 py-4">
                                         <div className="flex items-center justify-center gap-4">
-                                            <button onclick="editCategory(1)" aria-label="Edit" className="text-blue-500 transition
+                                            <button onclick={() => dispatch(editCategory(categor.id))} aria-label="Edit" className="text-blue-500 transition
                                                hover:text-blue-700">
-                                                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M12 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9M15 4l5 5M10 14l9-9a2.1 2.1 0 0 1 3 3l-9 9-5 1z" />
-                                                </svg>
+                                                <FiEdit className="h-5 w-5" />
                                             </button>
 
                                             <button onClick={() => dispatch(removeCategory(categor.id))} aria-label="Delete" className="text-red-500 transition
                                                hover:text-red-700">
-                                                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3" />
-                                                </svg>
+                                                <MdOutlineDelete className="h-5 w-5" />
                                             </button>
                                         </div>
                                     </td>

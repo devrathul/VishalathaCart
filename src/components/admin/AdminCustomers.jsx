@@ -44,21 +44,23 @@ const AdminCustomers = () => {
                     <input id="dateFilter" type="date" className="hidden h-10 rounded-lg border border-blue-100 px-3 text-sm" />
                 </div>
 
-                <div className="overflow-x-auto rounded-lg border border-blue-100">
-                    <table className="w-full min-w-[1050px] text-left text-xs">
-                        <thead className="bg-blue-50/70 text-[#18519b]">
-                            <tr>
-                                <th className="px-3 py-3 font-semibold">Customer</th>
-                                <th className="px-3 py-3 font-semibold">Email</th>
-                                <th className="px-3 py-3 font-semibold">Phone</th>
-                                <th className="px-3 py-3 font-semibold">Status</th>
-                                <th className="px-3 py-3 text-center font-semibold">Actions</th>
+                <div className="custom-scrollbar overflow-x-auto pt-3">
+                    <table  className="w-full min-w-250 border-collapse text-left text-[12px]">
+                        <thead>
+                            <tr className="h-9.75 rounded-lg bg-[#f2f7fc] text-[#153d7d]">
+                                <th className="px-3 font-semibold">Customer</th>
+                                <th className="px-3 font-semibold">Email</th>
+                                <th className="px-3 font-semibold">Phone</th>
+                                <th className="px-3 font-semibold">Status</th>
+                                <th className="rounded-r-lg px-3 text-center font-semiboldpx-3 py-3 text-center font-semibold">Actions</th>
                             </tr>
+                        </thead>
+                        <tbody id="customerTable">
                             {usersList.map((user) => (<tr className="h-12.5 border-b border-blue-100 hover:bg-blue-50">
-                                <td>{user.firstName} {user.lastName}</td>
-                                <td>{user.email}</td>
-                                <td>{user.phone}</td>
-                                <td>{user.status}</td>
+                                <td className="px-3">{user.firstName} {user.lastName}</td>
+                                <td className="px-3">{user.email}</td>
+                                <td className="px-3">{user.phone}</td>
+                                <td className="px-3">{user.status}</td>
                                 <td className="rounded-r-lg px-3 text-center flex items-center align-center justify-center h-12.5 gap-5">
                                     <Link className="text-blue-600 hover:text-blue-900" to="">
                                         <FiEdit className="h-5 w-5" />
@@ -68,9 +70,6 @@ const AdminCustomers = () => {
                                     </button>
                                 </td>
                             </tr>))}
-                        </thead>
-
-                        <tbody id="customerTable" className="divide-y divide-blue-100 bg-white">
                         </tbody>
                     </table>
                 </div>
