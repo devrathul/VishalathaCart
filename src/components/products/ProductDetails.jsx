@@ -3,23 +3,20 @@ import { Link, useParams, useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleWishlist } from '../../features/wishlist/wishlistSlice'
 import { addToCart } from "../../features/cart/cartSlice"
+import { addToOrders } from '../../features/orders/orderSlice'
 import Cookies from 'js-cookie'
+import { v4 as uuidv4 } from 'uuid';
+
 
 import {
     FaCartShopping,
     FaChevronRight,
     FaCircleCheck,
-    FaHeadset,
     FaHeart,
-    FaHouse,
-    FaLock,
     FaMinus,
     FaPlus,
-    FaRotateLeft,
-    FaShieldHalved,
     FaStar,
     FaStore,
-    FaTruckFast,
 } from 'react-icons/fa6'
 
 const productImages = import.meta.glob('../../assets/images/**/*', {
@@ -95,6 +92,40 @@ const ProductDetailsContent = ({ product, products }) => {
 
 
     const specifications = Object.entries(product.specifications || {})
+
+    const onBuyNow = () => {
+        if (!isLoggedIn) {
+            navigate('/login')
+            return
+        }
+
+        const orderdetails = {
+            id: `ORD-${uuidv4()}`,
+            customerId: user?.id ?? null,
+            products: [
+                {
+                    "productId": product.id,
+                    "quantity": quantity,
+                    "price": product.price
+                }
+            ],
+            totalAmount: 4998,
+            paymentMethod: "COD",
+            paymentStatus: "Pending",
+            deliveryStatus: "Shipped",
+            orderDate: Date.now(),
+            shippingAddress: {
+                street: "Kochi City",
+                city: "Kochi",
+                stat: "Kerala",
+                postalCode: "682001",
+                country: "India"
+            }
+        }
+
+        dispatch(addToOrders(orderdetails))
+        navigate('/vieworders')
+    }
 
     return (
         <div className="pb-10">
@@ -209,17 +240,20 @@ const ProductDetailsContent = ({ product, products }) => {
                         <span className="text-xs text-slate-500">Quantity</span>
                     </div>
 
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                        <button className="flex h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400" disabled={product.stock <= 0} type="button"
+                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                        <button className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg bg-blue-600 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400" disabled={product.stock <= 0} type="button"
                             onClick={handleAddToCart}>
                             <FaCartShopping /> Add to Cart
                         </button>
                         <button
-                            className={`flex h-12 items-center justify-center gap-2 rounded-lg border font-semibold transition ${isWishlisted ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-blue-500 text-blue-600 hover:bg-blue-50'}`}
+                            className={`flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg border font-semibold transition ${isWishlisted ? 'border-rose-300 bg-rose-50 text-rose-600' : 'border-blue-500 text-blue-600 hover:bg-blue-50'}`}
                             onClick={handleWishlistClick}
                             type="button"
                         >
                             <FaHeart /> {isWishlisted ? 'Added to Wishlist' : 'Add to Wishlist'}
+                        </button>
+                        <button className="flex h-12 items-center justify-center gap-2 rounded-lg bg-blue-600 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400 cursor-pointer" onClick={onBuyNow} type="button">
+                            Buy Now
                         </button>
                     </div>
                 </div>

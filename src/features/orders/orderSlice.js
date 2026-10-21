@@ -78,23 +78,26 @@ const ordersList = [
 ]
 
 export const orderSlice = createSlice({
-    name: 'orders',
-    initialState: {
-        value: ordersList,
+  name: 'orders',
+  initialState: {
+    value: ordersList,
 
+  },
+  reducers: {
+    updateDeliveryStatus: (state, action) => {
+      const { orderId, deliveryStatus } = action.payload
+      const order = state.value.find((item) => item.id === orderId)
+
+      if (order) {
+        order.deliveryStatus = deliveryStatus
+      }
     },
-    reducers: {
-        updateDeliveryStatus: (state, action) => {
-            const { orderId, deliveryStatus } = action.payload
-            const order = state.value.find((item) => item.id === orderId)
-
-            if (order) {
-                order.deliveryStatus = deliveryStatus
-            }
-        }
+    addToOrders: (state, action) => {
+      state.value = [...state.value, action.payload]
     }
+  }
 })
 
-export const { updateDeliveryStatus } = orderSlice.actions
+export const { updateDeliveryStatus,addToOrders } = orderSlice.actions
 
 export default orderSlice.reducer

@@ -22,6 +22,7 @@ import AdminProfile from './components/admin/AdminProfile'
 import AddCategory from './components/admin/AddCategory'
 import Wishlist from './components/wishlist/Wishlist'
 import ViewCart from './components/cart/ViewCart'
+import ViewOrder from './components/order/ViewOrder'
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/product/:productId", Component: ProductDetails },
       { path: "/wishlist", Component: Wishlist },
       { path: "/cart", Component: ViewCart },
+      { path: "/vieworders", Component: ViewOrder },
       { path: "/about", Component: About },
       { path: "/contact", Component: ContactUs },
       { path: "/login", Component: SignIn },
