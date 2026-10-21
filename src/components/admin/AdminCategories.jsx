@@ -2,14 +2,40 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FiPlus } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDelete } from "react-icons/md";
-import { removeCategory, editCategory } from '../../features/categories/categoriesSlice'
+import { removeCategory } from '../../features/categories/categoriesSlice'
 import { IoMdSearch } from "react-icons/io";
+import { useState } from 'react'
+import { Link } from 'react-router'
 
 
 const AdminCategories = () => {
 
+    const [searchCategoryItem, setSearchCategoryItem] = useState('')
+    const [categoryStatus, setCategoryStatus] = useState('')
     const categoriesList = useSelector((state) => state.categories.value);
     const dispatch = useDispatch()
+
+    const searchTerm = searchCategoryItem.trim().toLowerCase()
+
+    const filterategories = categoriesList.filter((category) => {
+
+        const matchesSearch = !searchTerm || [
+            category.categoryName,
+            category.description,
+        ].some(value => String(value ?? '').toLowerCase().includes(searchTerm))
+
+        const categoryStatusFilterlist = !categoryStatus || categoryStatus === category.status
+
+        return matchesSearch && categoryStatusFilterlist
+    })
+
+    const onCategories = (event) => {
+        setSearchCategoryItem(event.target.value)
+    }
+
+    const onCategoryStatus = (event) => {
+        setCategoryStatus(event.target.value)
+    }
 
     return (
         <>
@@ -21,45 +47,31 @@ const AdminCategories = () => {
                     </p>
                 </div>
 
-                <button id="addProductBtn" className="flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-[13px] font-medium text-white shadow-sm transition hover:bg-blue-700">
+                <Link to="/admin/category/add" className="flex h-10 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-[13px] font-medium text-white shadow-sm transition hover:bg-blue-700">
                     <FiPlus className="h-5 w-5" />
                     Add Category
-                </button>
+                </Link>
             </section>
 
-            <section className="rounded-xl border border-blue-100 p-4
-                        shadow-sm sm:p-5">
+            <section className="overflow-hidden rounded-[10px] border border-blue-100 bg-white/80">
 
-                <div className="mb-6 grid grid-cols-1 gap-4
-                        md:grid-cols-12">
+                <div className="filter-controls flex flex-wrap items-center gap-3 border-b border-blue-50 p-4">
 
-                    <div className="relative md:col-span-8">
-                        <IoMdSearch className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-                        <input id="searchInput" type="text" placeholder="Search categories by name..."
-                            oninput="filterCategories()" className="h-12 w-full rounded-lg border
-                               border-blue-100 bg-white pl-12 pr-4
-                               text-sm outline-none transition
-                               placeholder:text-slate-400
-                               focus:border-blue-400
-                               focus:ring-2 focus:ring-blue-100" />
+                    <div className="relative min-w-45 flex-1">
+                        <IoMdSearch className="absolute left-3 top-1/2 h-4.75 w-4.75 -translate-y-1/2" />
+                        <input id="searchInput" type="text" placeholder="Search categories by name..." value={searchCategoryItem}
+                            onChange={onCategories} className="h-9.75 w-full rounded-lg border border-blue-100 bg-[#f9fcff] pl-9 pr-3 text-[13px] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
                     </div>
 
-                    <div className="md:col-span-2">
-                        <select id="statusFilter" onchange="filterCategories()" className="h-12 w-full rounded-lg border
-                               border-blue-100 bg-white px-4
-                               text-sm outline-none
-                               focus:border-blue-400">
-
-                            <option value="all">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
+                    <select id="statusFilter" onChange={onCategoryStatus} className="h-9.75 min-w-41.25 rounded-lg border border-blue-100 bg-white px-3 text-[13px] outline-none focus:border-blue-400" value={categoryStatus}>
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
                 </div>
 
-                <div className="w-full overflow-x-auto">
-                    <table className="w-full min-w-190 border-collapse
-                              text-left text-sm">
+                <div className="custom-scrollbar overflow-x-auto px-4 py-3">
+                    <table  className="w-full min-w-250 border-collapse text-left text-[12px]">
 
                         <thead>
                             <tr className="bg-[#f1f6fc] text-[#17477f]">
@@ -87,7 +99,7 @@ const AdminCategories = () => {
                         </thead>
 
                         <tbody id="categoryTable">
-                            {categoriesList.map((categor) => (
+                            {filterategories.map((categor) => (
                                 <tr className="category-row border-b border-blue-100
                                    transition hover:bg-blue-50/40" data-id="1" data-name="Electronics"
                                     data-status="active" key={categor.id}>
@@ -104,17 +116,17 @@ const AdminCategories = () => {
                                     </td>
 
                                     <td className="px-4 py-4">
-                                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${categor.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${categor.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                             {categor.status}
                                         </span>
                                     </td>
 
                                     <td className="px-4 py-4">
                                         <div className="flex items-center justify-center gap-4">
-                                            <button onclick={() => dispatch(editCategory(categor.id))} aria-label="Edit" className="text-blue-500 transition
+                                            <Link to={`/admin/category/${categor.id}`} aria-label={`Edit ${categor.categoryName}`} className="text-blue-500 transition
                                                hover:text-blue-700">
                                                 <FiEdit className="h-5 w-5" />
-                                            </button>
+                                            </Link>
 
                                             <button onClick={() => dispatch(removeCategory(categor.id))} aria-label="Delete" className="text-red-500 transition
                                                hover:text-red-700">
@@ -128,9 +140,11 @@ const AdminCategories = () => {
                         </tbody>
                     </table>
 
-                    <p id="emptyMessage" className="hidden py-10 text-center text-sm text-slate-500">
-                        No categories found.
-                    </p>
+                    {filterategories.length === 0 && (
+                        <p id="emptyMessage" className="py-10 text-center text-sm text-slate-500">
+                            No categories found.
+                        </p>
+                    )}
                 </div>
             </section>
         </>

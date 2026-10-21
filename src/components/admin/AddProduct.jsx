@@ -43,9 +43,7 @@ const getProductImages = (product) => {
     return product?.image ? [product.image] : []
 }
 
-const getProductImageUrl = (image) => image?.startsWith('/')
-    ? image
-    : productImageAssets[`../../assets/images/${image}`] || image
+const getProductImageUrl = (image) => image?.startsWith('/') ? image : productImageAssets[`../../assets/images/${image}`] || image
 
 const getProductSpecifications = (product) => Object.entries(product?.specifications ?? {}).map(([field, value]) => ({
     ...createSpecification(),
@@ -54,6 +52,7 @@ const getProductSpecifications = (product) => Object.entries(product?.specificat
 }))
 
 const ProductForm = ({ productId, productToEdit, productList, categoryList }) => {
+
     const dispatch = useDispatch()
 
     const [selectedImages, setSelectedImages] = useState(() => {
@@ -530,6 +529,7 @@ const ProductForm = ({ productId, productToEdit, productList, categoryList }) =>
                             className="w-full resize-y rounded-md border border-[#cfe3ff] p-3 text-xs leading-5 text-[#173d70] outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
                         />
                     </section>
+                    <p>{descriptionCount}</p>
                 </div>
 
                 <div className="panel flex flex-wrap items-center justify-between gap-3 p-3">

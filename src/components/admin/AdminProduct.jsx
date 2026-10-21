@@ -136,7 +136,7 @@ const AdminProduct = () => {
                     </div>
                 </div>
 
-                <div className="custom-scrollbar overflow-x-auto px-4 pt-3">
+                <div className="custom-scrollbar overflow-x-auto px-4 py-3">
                     <table className="w-full min-w-250 border-collapse text-left text-[12px]">
 
                         <thead>

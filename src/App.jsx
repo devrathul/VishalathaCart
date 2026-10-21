@@ -17,8 +17,9 @@ import AdminProduct from './components/admin/AdminProduct'
 import AdminCategories from './components/admin/AdminCategories'
 import AdminCustomers from './components/admin/AdminCustomers'
 import AdminOrders from './components/admin/AdminOrders'
-import AddProduct from './components/admin/AddProduct'  
+import AddProduct from './components/admin/AddProduct'
 import AdminProfile from './components/admin/AdminProfile'
+import AddCategory from './components/admin/AddCategory'
 import Wishlist from './components/wishlist/Wishlist'
 import ViewCart from './components/cart/ViewCart'
 
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
       { path: "/products", Component: Products },
       { path: "/product/:productId", Component: ProductDetails },
       { path: "/wishlist", Component: Wishlist },
-      { path: "/cart", Component: ViewCart},
+      { path: "/cart", Component: ViewCart },
       { path: "/about", Component: About },
       { path: "/contact", Component: ContactUs },
       { path: "/login", Component: SignIn },
@@ -50,6 +51,8 @@ const router = createBrowserRouter([
       { path: "orders", Component: AdminOrders },
       { path: "products/add", Component: AddProduct },
       { path: "product/:productId", Component: AddProduct },
+      { path: 'category/add', Component: AddCategory },
+      { path: 'category/:categoryId', Component: AddCategory },
     ],
   },
 ]);

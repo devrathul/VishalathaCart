@@ -7,6 +7,7 @@ import multer from 'multer'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const imageDirectory = resolve(projectRoot, 'src/assets/images/products')
+const categoryImageDirectory = resolve(projectRoot, 'src/assets/images/category')
 const allowedImageTypes = new Map([
     ['image/jpeg', '.jpg'],
     ['image/png', '.png'],
@@ -15,10 +16,11 @@ const allowedImageTypes = new Map([
 ])
 
 mkdirSync(imageDirectory, { recursive: true })
+mkdirSync(categoryImageDirectory, { recursive: true })
 
-const upload = multer({
+const createImageUpload = (destination, maxFiles) => multer({
     storage: multer.diskStorage({
-        destination: imageDirectory,
+        destination,
         filename: (_request, file, callback) => {
             callback(null, `${randomUUID()}${allowedImageTypes.get(file.mimetype)}`)
         }
@@ -32,20 +34,30 @@ const upload = multer({
         callback(null, true)
     },
     limits: {
-        files: 5,
+        files: maxFiles,
         fileSize: 5 * 1024 * 1024
     }
 })
 
+const upload = createImageUpload(imageDirectory, 5)
+const uploadCategoryImage = createImageUpload(categoryImageDirectory, 1)
 const app = express()
 
-app.post('/api/uploads', upload.array('images', 5), (request, response) => {
+const sendUploadedImages = (request, response, imagePath) => {
     const images = request.files.map((file) => ({
         filename: file.filename,
-        url: `/src/assets/images/products/${file.filename}`
+        url: `${imagePath}/${file.filename}`
     }))
 
     response.status(201).json({ images })
+}
+
+app.post('/api/uploads', upload.array('images', 5), (request, response) => {
+    sendUploadedImages(request, response, '/src/assets/images/products')
+})
+
+app.post('/api/uploads/categories', uploadCategoryImage.array('images', 1), (request, response) => {
+    sendUploadedImages(request, response, '/src/assets/images/category')
 })
 
 app.use((error, _request, response, next) => {
