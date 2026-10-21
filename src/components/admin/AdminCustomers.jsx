@@ -1,12 +1,43 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router';
-import { FiEdit } from "react-icons/fi";
 import { MdOutlineDelete } from "react-icons/md";
-import { removeUser } from '../../features/users/usersSlice'
+import { removeUser, updateUserStatus } from '../../features/users/usersSlice'
+import {useState} from 'react'
 
 const AdminCustomers = () => {
 
+    const [searchCustomerItem, setSearchCustomerItem] = useState('')
+    const [customerStatus, setCustomerStatus] = useState('')
+
     const usersList = useSelector((state) => state.users.value);
+
+    const searchTerm = searchCustomerItem.trim().toLowerCase()
+
+    const filteredUserList = usersList.filter((user) => {
+
+        const userList = user.role !== 'admin'
+
+         const matchesSearch = !searchTerm || [
+            user.id,
+            user.firstName,
+            user.email,
+            user.phone,
+        ].some(value => String(value ?? '').toLowerCase().includes(searchTerm))
+
+        const customerStatusFilterlist = !customerStatus || customerStatus === user.status
+
+        return userList & matchesSearch & customerStatusFilterlist
+    })
+
+    const onUsers = (event) => {
+        setSearchCustomerItem(event.target.value)
+    }
+
+    const onCustomerStatus = (event) => {
+        setCustomerStatus(event.target.value)
+    }
+
+    const statusOptions = ['active', 'inactive']
+
     const dispatch = useDispatch()
 
     return (
@@ -31,12 +62,12 @@ const AdminCustomers = () => {
 
                         <input id="searchInput" type="search"
                             placeholder="Search by name, email, phone, or customer ID..."
-                            className="h-10 w-full rounded-lg border border-blue-100 bg-slate-50/50 pl-10 pr-3 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+                            className="h-10 w-full rounded-lg border border-blue-100 bg-slate-50/50 pl-10 pr-3 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" onChange={onUsers} />
                     </div>
 
                     <select id="statusFilter"
-                        className="h-10 rounded-lg border border-blue-100 bg-white px-3 text-sm outline-none focus:border-blue-400">
-                        <option value="all">All Status</option>
+                        className="h-10 rounded-lg border border-blue-100 bg-white px-3 text-sm outline-none focus:border-blue-400" onChange={onCustomerStatus}>
+                        <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
@@ -45,7 +76,7 @@ const AdminCustomers = () => {
                 </div>
 
                 <div className="custom-scrollbar overflow-x-auto pt-3">
-                    <table  className="w-full min-w-250 border-collapse text-left text-[12px]">
+                    <table className="w-full min-w-250 border-collapse text-left text-[12px]">
                         <thead>
                             <tr className="h-9.75 rounded-lg bg-[#f2f7fc] text-[#153d7d]">
                                 <th className="px-3 font-semibold">Customer</th>
@@ -56,16 +87,24 @@ const AdminCustomers = () => {
                             </tr>
                         </thead>
                         <tbody id="customerTable">
-                            {usersList.map((user) => (<tr className="h-12.5 border-b border-blue-100 hover:bg-blue-50">
+                            {filteredUserList.map((user) => (<tr className="h-12.5 border-b border-blue-100 hover:bg-blue-50">
                                 <td className="px-3">{user.firstName} {user.lastName}</td>
                                 <td className="px-3">{user.email}</td>
                                 <td className="px-3">{user.phone}</td>
-                                <td className="px-3">{user.status}</td>
+                                <td className="px-3">
+                                    <select name="" id="" className="h-9 rounded-lg border border-blue-100 bg-white px-2 text-xs text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-50 cursor-pointer" value={user.status} onChange={(event) => dispatch(updateUserStatus({
+                                        userID: user.id,
+                                        userStatus: event.target.value,
+                                    }))}>
+                                        {statusOptions.map((status) => (
+                                            <option key={status} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td>
                                 <td className="rounded-r-lg px-3 text-center flex items-center align-center justify-center h-12.5 gap-5">
-                                    <Link className="text-blue-600 hover:text-blue-900" to="">
-                                        <FiEdit className="h-5 w-5" />
-                                    </Link>
-                                    <button className="ml-2 text-red-600 hover:text-red-900" onClick={() => { dispatch(removeUser(user.id)) }}>
+                                    <button className="ml-2 text-red-600 hover:text-red-900 cursor-pointer" onClick={() => { dispatch(removeUser(user.id)) }}>
                                         <MdOutlineDelete className="h-5 w-5" />
                                     </button>
                                 </td>
